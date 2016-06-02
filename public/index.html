@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Dungeon</title>
+	<title>The Hole</title>
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
@@ -421,7 +421,7 @@
 			getHit(1);
 		} else if (pStats.justDescended && pStats.depth%10) {
 			if (prev == start) {
-				state.innerHTML = "<p><br>You proceed to the next floor</p>";
+				state.innerHTML = "<p><br>You descend to the next floor</p>";
 			} else {
 				pStats.justDescended = false;
 			}
@@ -717,21 +717,3 @@
 	</script>
 </body>
 </html>
-<!--
-###################################
-######### DEVELOPER NOTES #########
-###################################
-Things that need to be implemented:
--Quests
--Prayer
--make the enemies stop running into walls forever
--add Title attr for everything
--leaderboard position in player data
--allow clicking menu options
--Shop
-	-strong enemies
--Achievements
-	-Make shadow killer achievement
-	-Death by shadow
-	-Dying a lot achievement
--->
