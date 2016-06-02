@@ -1,0 +1,251 @@
+@media only screen and (min-width: 1900px) and (orientation: landscape) {
+	#map, #stats {
+		font-size: 40px;
+	}
+}
+
+@media only screen and (min-width: 1700px) and (max-width: 1899px) and (orientation: landscape) {
+	#map, #stats {
+		font-size: 36px;
+	}
+}
+
+@media only screen and (min-width: 1500px) and (max-width: 1699px) and (orientation: landscape) {
+	#map, #stats {
+		font-size: 32px;
+	}
+}
+
+@media only screen and (min-width: 1300px) and (max-width: 1499px) and (orientation: landscape) {
+	#map, #stats {
+		font-size: 28px;
+	}
+}
+
+@media only screen and (min-width: 1100px) and (max-width: 1299px) and (orientation: landscape) {
+	#map, #stats {
+		font-size: 24px;
+	}
+}
+
+@media only screen and (min-width: 900px) and (max-width: 1099px) and (orientation: landscape) {
+	#map, #stats {
+		font-size: 20px;
+	}
+}
+
+@media only screen and (min-width: 700px) and (max-width: 899px) and (orientation: landscape) {
+	#map, #stats {
+		font-size: 16px;
+	}
+}
+
+@media only screen and (max-width: 699px) and (orientation: landscape) {
+	#map, #stats {
+		font-size: 12px;
+	}
+}
+
+@media only screen and (orientation: landscape) {
+	#map {
+		position:fixed;
+		top:60px;
+		z-index:1000;
+		left:0%;	
+	}
+	#stats {
+		position: fixed;
+		z-index: 1000;
+		left: 50%;
+		top: 60px;		
+	}
+}
+
+@media only screen and (min-width: 1900px) and (orientation: portrait) {
+	#map, #stats {
+		font-size: 45px;
+	}
+}
+
+@media only screen and (min-width: 1700px) and (max-width: 1899px) and (orientation: portrait) {
+	#map, #stats {
+		font-size: 41px;
+	}
+}
+
+@media only screen and (min-width: 1500px) and (max-width: 1699px) and (orientation: portrait) {
+	#map, #stats {
+		font-size: 37px;
+	}
+}
+
+@media only screen and (min-width: 1300px) and (max-width: 1499px) and (orientation: portrait) {
+	#map, #stats {
+		font-size: 33px;
+	}
+}
+
+@media only screen and (min-width: 1100px) and (max-width: 1299px) and (orientation: portrait) {
+	#map, #stats {
+		font-size: 29px;
+	}
+}
+
+@media only screen and (min-width: 900px) and (max-width: 1099px) and (orientation: portrait) {
+	#map, #stats {
+		font-size: 25px;
+	}
+}
+
+@media only screen and (min-width: 700px) and (max-width: 899px) and (orientation: portrait) {
+	#map, #stats {
+		font-size: 21px;
+	}
+}
+
+@media only screen and (min-width: 500px) and (max-width: 699px) and (orientation: portrait) {
+	#map, #stats {
+		font-size: 17px;
+	}
+}
+
+@media only screen and (min-width: 300px) and (max-width: 499px) and (orientation: portrait) {
+	#map, #stats {
+		font-size: 12px;
+	}
+}
+
+@media only screen and (min-width: 200px) and (max-width: 299px) and (orientation: portrait) {
+	#map, #stats {
+		font-size: 8px;
+	}
+}
+
+@media only screen and (max-width: 199px) and (orientation: portrait) {
+	#map, #stats {
+		font-size: 6px;
+	}
+}
+
+@media only screen and (orientation: portrait) {
+	#map {
+		text-align: center;
+	}
+	#stats {
+		text-align: center;
+		top: 50%;		
+	}
+}
+
+#map {
+	font-family: monospace;
+	margin: 0 !important;
+	background-color: black;
+	line-height: 80%;
+}
+
+#stats {
+	line-height: 80%;
+}
+
+#menu {
+	font-size: 2em;
+	color: white;
+	background-color: black;
+}
+
+#info {
+	font-size:3em;
+	color:red;
+	text-align:center;
+	background-color: black;
+}
+
+pre { /* https://css-tricks.com/snippets/css/make-pre-text-wrap/*/
+	white-space: pre-wrap;       /* css-3 */
+	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	white-space: -pre-wrap;      /* Opera 4-6 */
+	white-space: -o-pre-wrap;    /* Opera 7 */
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+#shop {
+	color:gray;
+}
+
+#battle {
+	color:#FF1493;
+}
+
+#warning {
+	color:#1a1a1a;
+}
+
+.water {
+	color: blue;
+}
+
+.player {
+	color: white;
+}
+
+.path {
+	color:#AC7F24;
+}
+
+.wall {
+	color:#faebd7;
+}
+
+.exit {
+	color:#32cd32;
+}
+
+.start {
+	color:yellow;
+}
+
+
+#dead {
+	color:red;
+}
+
+.weapon {
+	color:gray;
+}
+
+.true {
+	color:green;
+}
+
+.false {
+	color:gray;
+}
+
+.type0 {
+	color:red;
+}
+.type1 {
+	color:orange;
+}
+.type2 {
+	color:yellow;
+}
+.type3 {
+	color:green;
+}
+.type4 {
+	color:#00BFFF;
+}
+.type5 {
+	color:purple;
+}
+.type6 {
+	color:#FFC0CB;
+}
+.type7 {
+	color:#C71585;
+}
+.type8 {
+	color:black;
+}
