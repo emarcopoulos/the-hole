@@ -1,16 +1,16 @@
 #README for Down the Hole we all Go
 
-##'Down the Hole we all Go', or 'The Hole', is a JavaScript game in which a hero descends through increasingly difficult levels with a simple goal: go deep.
+##'Down the Hole we all Go', or 'The Hole', is a JavaScript game in which a hero descends through increasingly difficult levels with a simple goal: _go deep_.
 
-#####GENERATION OF RANDOM FLOORS:
-	1. Generate a map filled with walls
-	2. Create a room at the players position
-	3. Build a maximum of rooms equal to a fifth of the height of the map
-	4. Connect each of those rooms to the start room
-	5. Build a room and put the exit inside
-	6. Connect the last generated empty room to the exit room
-	7. Place a weapon, with a decreasing 1/n probability of occurence
-	8. Place enemies, up to 40, of increasing difficulty based on player depth
+#####ALGORITHM FOR GENERATION OF RANDOM FLOORS:
+1. Generate a map filled with walls
+2. Create a room at the players position
+3. Build a maximum of rooms equal to a fifth of the height of the map
+4. Connect each of those rooms to the start room
+5. Build a room and put the exit inside
+6. Connect the last generated empty room to the exit room
+7. Place a weapon, with a decreasing 1/n probability of occurence
+8. Place enemies, up to 40, of increasing difficulty based on player depth
 
 ###Things to be implemented:
 - Quests
@@ -46,7 +46,7 @@
 - Added enemies which move
 - Added battling enemies
 - Placed weapons
-- Kept track player statistics
+- Kept track of player statistics
 - Added colorful enemies
 - Added Shadow enemies
 - Added a menu screen with:
