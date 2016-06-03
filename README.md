@@ -74,5 +74,9 @@
 - Deployed the game to heroku
 - Updated site title to 'The Hole'
 - Designed and added a favicon 
--Created this README
+- Created this README
+
 ###################################
+### 6/3/2016 ######################
+###################################
+- Fixed formatting on README.md
