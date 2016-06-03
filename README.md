@@ -67,6 +67,7 @@
 - Added instructions on first play
 - Added royalty free music
 - CSS made responsive
+
 ###################################
 ### 6/2/2016 ######################
 ###################################
