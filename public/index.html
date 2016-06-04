@@ -248,14 +248,6 @@
 		score = document.getElementById('score');
 		highScore = document.getElementById('highScore');
 		if (isMobile) {
-				    if ((e.keyCode == '38' || e.keyCode == 87) && board[pos[0]-1][pos[1]] != wall) {
-			moveplayer(-1,0);
-	    } else if ((e.keyCode == '40' || e.keyCode == 83) && board[pos[0]+1][pos[1]] != wall) {
-	        moveplayer(1,0);
-	    } else if ((e.keyCode == '37' || e.keyCode == 65) && board[pos[0]][pos[1]-1] != wall) {
-	      	moveplayer(0,-1);
-	    } else if ((e.keyCode == '39' || e.keyCode == 68) && board[pos[0]][pos[1]+1] != wall) {
-	    	moveplayer(0,1);
 			document.getElementById('keys').innerHTML = "<div id='horz'><button type='button' onclick='\
 				if (board[pos[0]][pos[1]-1] != wall) {\
 					moveplayer(0,-1);\
