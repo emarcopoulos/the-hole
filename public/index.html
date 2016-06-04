@@ -10,10 +10,10 @@
 <body>
 	<audio id='mp3' autoplay loop><source id='source' src ='Upbeat Electronic Music (Copyright and Royalty Free).mp3' type="audio/mp3"/></audio>
 	<h1>Down the Hole we all Go</h1>
-	<div id="menu"/>
-	<div id="info"/>
-	<div id="map"/>
-	<div id="stats"/>
+	<div id="menu"></div>
+	<div id="info"></div>
+	<div id="map"></div>
+	<div id="stats"></div>
 	<script>
 	var qString;
 	window.onpopstate = function () { //http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
@@ -238,7 +238,7 @@
 		}
 		pos = [Math.ceil((Math.random() * (size-2))),Math.ceil((Math.random() * (2*size-2)))];
  		generateFirstMap();
-		stats.innerHTML="<pre>Hero: "+pStats.name+"<br><span id='health'>HP: "+pStats.HP+"/"+pStats.maxHP+"</span><br>Score: <span id='score'>"+pStats.score+"</span>   High: <span id='highScore'>"+pStats.highScore+"</span><br>You have descended <span id='depth'>"+pStats.depth+"</span> floors<br>You brandish <span title='Does "+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].dmg)||0)+" damage' id='weapon'>"+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].name)||"a smile")+"</span><br>Your hero is level <span id='level'>"+pStats.lvl+"</span></pre><div id='state'/><div id='battle'/><div id='keys'/>";
+		stats.innerHTML="<pre>Hero: "+pStats.name+"<br><span id='health'>HP: "+pStats.HP+"/"+pStats.maxHP+"</span><br>Score: <span id='score'>"+pStats.score+"</span>   High: <span id='highScore'>"+pStats.highScore+"</span><br>You have descended <span id='depth'>"+pStats.depth+"</span> floors<br>You brandish <span title='Does "+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].dmg)||0)+" damage' id='weapon'>"+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].name)||"a smile")+"</span><br>Your hero is level <span id='level'>"+pStats.lvl+"</span></pre><div id='state'></div><div id='battle'></div><div id='keys'></div>";
 		state = document.getElementById('state');
 		battle = document.getElementById('battle');
 		health = document.getElementById('health');
