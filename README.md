@@ -87,3 +87,17 @@
 - Made the game work on mobile
 
 ###################################
+### 6/5/2016 ######################
+###################################
+- Added MongoDB storage for users
+  - post methods for:
+  	- logging in
+  	- saving game
+  - get method for:
+  	- retrieving high scores
+- Added useer global accounts
+  - each player has:
+	- username
+	- password
+  - leaderboard is now global
+- disable user zoom on mobile

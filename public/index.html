@@ -3,7 +3,7 @@
 <head>
 	<title>The Hole</title>
 	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -44,9 +44,54 @@
 	var water = "<span title='water' class='water'>~</span>";
 	var path = "<span title='path' class='path'>-</span>";
 	var weapon = "<span title='new weapon' class='weapon'>/</span>";
-	var weapons = [{"name":"a fist","dmg":1},{"name":"brass knuckles","dmg":2},{"name":"a bat","dmg":3},{'name':"a knife","dmg":4},{'name':"a sword","dmg":7},{"name":"a broadsword","dmg":8},{"name":"dual swords","dmg":9},{'name':"a shotgun","dmg":10},{'name':"a demon's sad smile","dmg":-1},{'name':"an ego","dmg":10},{'name':"a dead baby enemy","dmg":15},{'name':"a javaScipt console","dmg":22},{'name':"a c++ complier","dmg":30},{'name':"the heat death of the universe","dmg":50}];
+	var weapons = [{"name":"a fist","dmg":1},
+				   {"name":"brass knuckles","dmg":2},
+				   {"name":"a bat","dmg":3},
+				   {'name':"a knife","dmg":4},
+				   {'name':"a sword","dmg":7},
+				   {"name":"a broadsword","dmg":8},
+				   {"name":"dual swords","dmg":9},
+				   {'name':"a shotgun","dmg":10},
+				   {'name':"a demon's sad smile","dmg":-1},
+				   {'name':"an ego","dmg":10},
+				   {'name':"a dead baby enemy","dmg":15},
+				   {'name':"a javaScipt console","dmg":22},
+				   {'name':"a c++ complier","dmg":30},
+				   {'name':"the heat death of the universe","dmg":50}];
 	var neWeapon;
-	var pStats = {"HP":100,"name":qString["name"]||"Fred","depth":0,"lvl":0,"maxHP":100,"justDescended":false,"kills":0,"lvlUp":false,"dmg":0,"score":0,"highScore":0,"time":0,"typesKilled":falseArray(8),"weaponsFound":0,"maxDepth":0,"multiply":1,"shield":0,"currentWeapon":0,"skip":0,"mute":false,"shadowMultiply":false,"shadowShield":false,"waterShield":false,"interval":1000};
+	var newUser = function (name, pass) {
+		var playerStats = {
+			"HP":100,
+			"name":name||"Fred",
+			"depth":0,
+			"lvl":0,
+			"maxHP":100,
+			"justDescended":false,
+			"kills":0,
+			"lvlUp":false,
+			"dmg":0,
+			"score":0,
+			"highScore":0,
+			"time":0,
+			"typesKilled":falseArray(8),
+			"weaponsFound":0,
+			"maxDepth":0,
+			"multiply":1,
+			"shield":0,
+			"currentWeapon":0,
+			"skip":0,
+			"mute":false,
+			"shadowMultiply":false,
+			"shadowShield":false,
+			"waterShield":false,
+			"interval":1000
+		};
+		if (pass) {
+			playerStats.pass = pass;
+		}
+		return playerStats;
+	}
+	var pStats = newUser(qString["name"]||"Fred");
 	var allStats;
 	var player = "<span title='player' class='player'>"+pStats.name[0]+"</span>";
 	var enemy = "<span title='enemy' class='enemy'>*</span>";
@@ -343,7 +388,10 @@
 	    	moveplayer(0,1);
 	    } else if (e.keyCode == 80) {
 	    	clearInterval(everySecond);
-	    	state.innerHTML = "<p>The game is paused.<br>Press 'p' to resume.<br>Press 'q' to quit to menu.<br>Press 'm' to mute/unmute music.</p>";
+	    	state.innerHTML = "<p>The game is paused.<br>\
+	    					   Press 'p' to resume.<br>\
+	    					   Press 'q' to quit to menu.<br>\
+	    					   Press 'm' to mute/unmute music.</p>";
 	    	document.onkeydown = function (e) {
 	    		if (e.keyCode==80) {
 	    			state.innerHTML = "";
@@ -437,7 +485,10 @@
 		pStats.dmg = 0;
 		pStats.HP = pStats.maxHP;
 		saveGame();
-		state.innerHTML = "<p id='dead'><br>You have died</p><p>Press 'r' to restart<br>Press 't' to trade score for max HP boost<br>Press 'm' to access the menu</p>";		
+		state.innerHTML = "<p id='dead'><br>You have died</p>\
+						   <p>Press 'r' to restart<br>\
+						   Press 't' to trade score for max HP boost<br>\
+						   Press 'm' to access the menu</p>";		
 	};
 	var update = function () {
 		pStats.time++;
@@ -521,7 +572,9 @@
 						...Beware of the Shadows...</p>";
 	};
 	var showAchievements = function () {
-		var html ="<h1>Achievements</h1><h6>Hover over achievement to see description.</h6><pre>";
+		var html = "<h1>Achievements</h1>\
+				    <h6>Hover over achievement to see description.</h6>\
+				    <pre>";
 		for (var i = 0; i < 7; i++) {
 			html+="<span class='"+(pStats.kills>=Math.pow(10,i))+"' title='kill "+Math.pow(10,i)+" enemies'>["+Math.pow(10,i)+"K]</span>  ";
 		}
@@ -529,17 +582,17 @@
 		for (var i = 0; i < 8; i++) {
 			html+="<span class='"+pStats.typesKilled[i]+"' title='kill enemy type "+i+"'>[<span class='type"+i+"'>*</span>]</span>    ";
 		}
-		html+="<br><br>";
+		html += "<br><br>";
 		for (var i = 0; i < 8; i++) {
-			html+="<span class='"+(pStats.maxDepth>=Math.floor(Math.pow(3,1.5*i)))+"' title='descend "+Math.floor(Math.pow(3,1.5*i))+" floors'>["+Math.floor(Math.pow(3,1.5*i))+"F]</span>  ";
+			html += "<span class='"+(pStats.maxDepth>=Math.floor(Math.pow(3,1.5*i)))+"' title='descend "+Math.floor(Math.pow(3,1.5*i))+" floors'>["+Math.floor(Math.pow(3,1.5*i))+"F]</span>  ";
 		}
-		html+="<br><br>";
+		html += "<br><br>";
 		for (var i = 0; i < weapons.length; i++) {
 			var abbrev = "";
 			if (weapons[i].name=="a broadsword") {
-				abbrev="BS";
+				abbrev = "BS";
 			} else if (weapons[i].name=="a shotgun") {
-				abbrev="SG";
+				abbrev = "SG";
 			} else {
 				if (weapons[i].name[0] != 'a' && weapons[i].name[0] != 't') {
 					abbrev += weapons[i].name[0];
@@ -550,14 +603,14 @@
 					}
 				}
 			}
-			html+='<span class="'+(pStats.weaponsFound>i)+'" title="pickup '+weapons[i].name+'">['+abbrev.toUpperCase()+']</span> ';
+			html += '<span class="'+(pStats.weaponsFound>i)+'" title="pickup '+weapons[i].name+'">['+abbrev.toUpperCase()+']</span> ';
 		}
-		html+="<br><br>";
+		html += "<br><br>";
 		for (var i = 0; i < 7; i++) {
-			html+="<span class='"+(pStats.highScore>Math.pow(2,5*i))+"' title='record a score above "+Math.pow(2,5*i)+"'>["+Math.pow(2,5*i)+"S]</span>  ";
+			html += "<span class='"+(pStats.highScore>Math.pow(2,5*i))+"' title='record a score above "+Math.pow(2,5*i)+"'>["+Math.pow(2,5*i)+"S]</span>  ";
 		}
-		html+="<br><br><span class='"+(pStats.time>=1)+"' title='play for 1 second'>[1S]</span>  <span class='"+(pStats.time>=10)+"' title='play for 10 seconds'>[10S]</span>  <span class='"+(pStats.time>=60)+"' title='play for 1 minute'>[1M]</span>  <span class='"+(pStats.time>=600)+"' title='play for 10 minutes'>[10M]</span>  <span class='"+(pStats.time>=3600)+"' title='play for 1 hour'>[1H]</span>  <span class='"+(pStats.time>=36000)+"' title='play for 10 hours'>[10H]</span>  <span class='"+(pStats.time>=24*3600)+"' title='play for 1 day'>[1D]</span>  <span class='"+(pStats.time>=48*3600)+"' title='play for 2 days'>[2D]</span>  <span class='"+(pStats.time>=3*24*3600)+"' title='play for 3 days'>[3D]</span></pre>";
-		info.innerHTML=html;
+		html += "<br><br><span class='"+(pStats.time>=1)+"' title='play for 1 second'>[1S]</span>  <span class='"+(pStats.time>=10)+"' title='play for 10 seconds'>[10S]</span>  <span class='"+(pStats.time>=60)+"' title='play for 1 minute'>[1M]</span>  <span class='"+(pStats.time>=600)+"' title='play for 10 minutes'>[10M]</span>  <span class='"+(pStats.time>=3600)+"' title='play for 1 hour'>[1H]</span>  <span class='"+(pStats.time>=36000)+"' title='play for 10 hours'>[10H]</span>  <span class='"+(pStats.time>=24*3600)+"' title='play for 1 day'>[1D]</span>  <span class='"+(pStats.time>=48*3600)+"' title='play for 2 days'>[2D]</span>  <span class='"+(pStats.time>=3*24*3600)+"' title='play for 3 days'>[3D]</span></pre>";
+		info.innerHTML = html;
 	};
 	var showData = function () {
 		info.innerHTML="<h1>Player Data</h1><pre>Hero Name:   "+pStats.name+"<br>Hero Level:  "+pStats.lvl+"<br>Max HP:      "+pStats.HP+"<br>Score:       "+pStats.score+"<br>High Score:  "+pStats.highScore+"<br>Deepest Run: "+pStats.maxDepth+"<br>Enemy Kills: "+pStats.kills+"<br>Time Played: "+pStats.time+"s</pre>";
@@ -616,18 +669,27 @@
 	var showBoard = function () {
 		var html = "<h1>Leaderboard</h1>";
 		var scores = [];
-		for (var name in allStats) {
-			if (allStats.hasOwnProperty(name)) {
-    			scores[scores.length] = {"name":name,"score":allStats[name].highScore};
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+		    if (xhr.readyState == 4) {
+		        var allStats = JSON.parse(this.response);
+		        for (var name in allStats) {
+					if (allStats.hasOwnProperty(name)) {
+		    			scores[scores.length] = {"name":name,"score":allStats[name]};
+					}
+				}
+				scores.sort(function (b,a) {
+					return a.score - b.score;
+				});
+				for (var i = 0; i < scores.length; i++) {
+					html += "<p>"+(i+1)+") "+scores[i].name+": "+scores[i].score+"</p>";
+				}
+				info.innerHTML = html;
 			}
 		}
-		scores.sort(function(b,a) {
-			return a.score - b.score;
-		});
-		for (var i = 0; i < scores.length; i++) {
-			html += "<p>"+(i+1)+") "+scores[i].name+": "+scores[i].score+"</p>";
-		}
-		info.innerHTML=html;
+		xhr.open('GET', "/allStats", true);
+		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		xhr.send(null);
 	};
 	var showHints = function () {
 		info.innerHTML="<h1>Hints</h1>\
@@ -693,7 +755,27 @@
 		}
 	};
 	var intro = function () {
-		info.innerHTML="<h1>Welcome to The Game</h1><p>Here is a quick breakdown of everything:<br>"+player+" is your hero, it's the first letter of your name, "+pStats.name+".<br>(Not you? Click <span onclick='changeUser();'>[here]<span> or press 'u' to switch user)<br>"+path+" is the path you can walk on.<br>"+wall+" is a wall, blocking the way.<br>"+water+" is water-- caution though, you sink!<br>"+weapon+" is a weapon, pick them up for a damage boost.<br><span class='type1'>"+enemy+"</span> is an enemy. They come in many colors.<br>"+exit+" is the hole you fall to the next floor through.<br>"+start+" marks where you descended from the previous floor.<br>You can use the arrow keys or wasd keys to move.<br>Press 'p' to pause the game.<br>Press 'm' to mute/unmute the music.<br><br>Your hero level allows you to do more damage to enemies.<br>Level up by battling foes!<br>But also be sure to watch your health points (HP).<br>Try to go deep, get a high score, and get all the weapons!</p><p>Press any key to start your legacy.<br>Or click <span onclick='restart();'>[here]</span></p>";
+		info.innerHTML="<h1>Welcome to The Game</h1>\
+						<p>Here is a quick breakdown of everything:<br>\
+						"+player+" is your hero, it's the first letter of your name, "+pStats.name+".<br>\
+						(Not you? Click <span onclick='changeUser();'>[here]<span> or press 'u' to switch user)<br>\
+						"+path+" is the path you can walk on.<br>\
+						"+wall+" is a wall, blocking the way.<br>\
+						"+water+" is water-- caution though, you sink!<br>\
+						"+weapon+" is a weapon, pick them up for a damage boost.<br>\
+						<span class='type1'>"+enemy+"</span> is an enemy. They come in many colors.<br>\
+						"+exit+" is the hole you fall to the next floor through.<br>\
+						"+start+" marks where you descended from the previous floor.<br>\
+						You can use the arrow keys or wasd keys to move.<br>\
+						Press 'p' to pause the game.<br>\
+						Press 'm' to mute/unmute the music.<br>\
+						<br>\
+						Your hero level allows you to do more damage to enemies.<br>\
+						Level up by battling foes!<br>\
+						But also be sure to watch your health points (HP).<br>\
+						Try to go deep, get a high score, and get all the weapons!</p>\
+						<p>Press any key to start your legacy.<br>\
+						Or click <span onclick='restart();'>[here]</span></p>";
 		document.onkeydown = function (e) {
 			if (e.keyCode == 85) {
 				changeUser();
@@ -704,38 +786,54 @@
 			}
 		}
 	};
+	var login = function () {
+		var name = document.getElementById('user').value;
+		var pass = document.getElementById('pass').value;
+		if (name && pass) {
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+		 		if (xhr.readyState == 4) {
+		 			info.innerHTML="";
+		 			if (this.response != "newUser") {
+			 			pStats = JSON.parse(this.response);
+			 		} else {
+			 			pStats = newUser(name, pass);
+			 		}
+				localStorage.prevLogin = JSON.stringify(pStats);
+				window.location.href = window.location.origin+"?name="+pStats.name;
+		 		}
+		 	}
+			xhr.open('POST', "/changeUser", true);
+			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			sendstring = "user="+(document.getElementById('user').value)+"&pass="+(document.getElementById('pass').value);
+			xhr.send(sendstring);
+		}
+	};
 	var changeUser = function () {
 		document.onkeydown = function (e) {
 			if (e.keyCode == 13) {
-				window.location.href=window.location.pathname+"?name="+document.getElementById("user").value;
+				login();
 			}
 		};
 		menu.innerHTML="";
-		info.innerHTML="<p>Enter your name: <input type='text' id='user' autofocus> <span onclick='window.location.href=window.location.pathname+"+'"?name="'+"+document.getElementById("+'"user"'+").value'>[Submit]</span></p>";
+		info.innerHTML="<p>Enter your username and password:<br>\
+						<input type='text' id='user' autofocus><br>\
+						<input type='text' id='pass' autofocus><br>\
+						<span onclick='login();'>[Submit]</span></p>\
+						<h6>Note: If you do not yet have an account, this form will create an account for you.</h6>";
 	};
 	var saveGame = function () {
 		var name = pStats.name;
-		if (!localStorage.pStats) {
-			allStats = {};
-			allStats[name] = pStats;
-		} else {
-			allStats[name] = pStats;
-		}
-    	localStorage.pStats=JSON.stringify(allStats);
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', "/saveGame", true);
+		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		sendstring = "pStats="+JSON.stringify(pStats);
+		xhr.send(sendstring);
+		localStorage.prevLogin = JSON.stringify(pStats);
 	};
 	var letUsBegin = function () {
-		if (localStorage.pStats) {
-			allStats = JSON.parse(localStorage.pStats);
-			if (allStats[qString["name"]||"Fred"]) {
-				pStats = allStats[qString["name"]||"Fred"];
-				if (pStats.mute) {
-					music.pause();
-				}
-				if (pStats.name != "Fred") {
-					restart();
-					return;
-				}
-			}
+		if (localStorage.prevLogin && JSON.parse(localStorage.prevLogin).pass) {
+			pStats = JSON.parse(localStorage.prevLogin);
 		}
 		intro();
 	}();

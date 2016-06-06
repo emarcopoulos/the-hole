@@ -4,7 +4,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient, format = require('util').format;
 var ObjectId = require('mongodb').ObjectId;
-var mongoUri = "mongodb://heroku_m4c5l1x1:n1q59l0vq10d5njkjc8hdgnig3@ds023"
+var mongoUri = "mongodb://localhost:27017/";//heroku_m4c5l1x1:n1q59l0vq10d5njkjc8hdgnig3@ds023";
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -17,30 +17,58 @@ app.use(bodyParser.urlencoded({ extended: true })); // Required if we need to us
 var db = MongoClient.connect(mongoUri, function(error, databaseConnection) {
 	db = databaseConnection;
 });
-/* CORS
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+
+/*app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:5000");//"https://the-hole.herokuapp.com");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
-});
-*/
+});*/
+
 // views is directory for all template files
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.get('/', function (request, response) {
-	response.send(__dirname + '/index.html');
+app.get('/', function (req, res) {
+	res.send(__dirname + '/index.html');
 });
 
 app.post('/saveGame', function (req, res) {
-	var toInsert = {_id:req.body.pStats.name};
-	toInsert[req.body.pStats.name] = req.body.pStats;
-	db.collection('users').update({_id:req.body.pStats.name}, toInsert, {upsert:true});
-	res.send(200);
+	var pStats = JSON.parse(req.body.pStats);
+	if (pStats) {
+		if (pStats.pass) {
+			var toInsert = {name:pStats.name, pass:(pStats.pass), pStats:pStats};
+			db.collection('users').update(
+				{$and:[{name:pStats.name},{pass:pStats.pass}]},
+				toInsert,
+				{upsert:true}
+			);
+		}
+		res.sendStatus(200);
+	} else {
+		res.sendStatus(400);
+	}
 });
 
 app.get('/allStats', function (req, res) {
-	console.log(db.collection('users').find());
+	db.collection('users').find().toArray(function (err, cursor) {
+		var allStats = {}
+		for (var i = 0; i < cursor.length; i++) {
+			if (cursor[i].name && cursor[i].pStats) {
+				allStats[cursor[i].name] = cursor[i].pStats.highScore;
+			}
+		}
+		res.send(allStats);
+	});
+});
+
+app.post('/changeUser', function (req, res) {
+	db.collection('users').findOne({$and:[{name:req.body.user},{pass:req.body.pass}]}, function (err, doc) {
+		if (doc) {
+			res.send(doc.pStats);
+		} else {
+			res.send("newUser");
+		}
+	});
 });
 
 app.listen(app.get('port'), function() {
