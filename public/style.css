@@ -171,7 +171,7 @@ pre { /* https://css-tricks.com/snippets/css/make-pre-text-wrap/*/
 
 #horz, #vert {
 	position: fixed;
-	font-size: 60px;
+	font-size: 120px;
 	bottom: 5px;
 }
 
