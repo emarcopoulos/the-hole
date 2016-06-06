@@ -169,6 +169,11 @@ pre { /* https://css-tricks.com/snippets/css/make-pre-text-wrap/*/
 	word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
+html { /*http://stackoverflow.com/questions/12238587/eliminate-300ms-delay-on-click-events-in-mobile-safari*/
+-ms-touch-action: manipulation;
+touch-action: manipulation;
+}
+
 button {
 	width:80px;
 	height:60px;
