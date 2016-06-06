@@ -4,7 +4,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient, format = require('util').format;
 var ObjectId = require('mongodb').ObjectId;
-var mongoUri = "mongodb://localhost:27017/";//heroku_m4c5l1x1:n1q59l0vq10d5njkjc8hdgnig3@ds023";
+var mongoUri = "mongodb://heroku_m4c5l1x1:n1q59l0vq10d5njkjc8hdgnig3@ds023613.mlab.com:23613/heroku_m4c5l1x1";
 
 app.set('port', (process.env.PORT || 5000));
 
