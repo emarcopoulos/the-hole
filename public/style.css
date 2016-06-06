@@ -169,6 +169,20 @@ pre { /* https://css-tricks.com/snippets/css/make-pre-text-wrap/*/
 	word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
+#horz, #vert {
+	position: fixed;
+	font-size: 60px;
+	bottom: 5px;
+}
+
+#horz {
+	left:5px;
+}
+
+#vert {
+	right:5px;
+}
+
 #shop {
 	color:gray;
 }

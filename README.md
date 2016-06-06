@@ -101,3 +101,4 @@
 	- password
   - leaderboard is now global
 - disable user zoom on mobile
+- better position mobile controls
