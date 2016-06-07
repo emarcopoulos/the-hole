@@ -15,24 +15,24 @@
 ###Things to be implemented:
 - Quests
 - Prayer
-- delete enemies on pause
-- Say how many kills to next level
+- create better tutorial
 - make the enemies stop running into walls forever
 - add Title attr for everything
 - leaderboard position in player data
 - allow clicking menu options
 - Shop
 	- strong enemies
+	- change enemy interval
 - Achievements
 	- Make shadow killer achievement
 	- Death by shadow
 	- Dying a lot achievement
 
-###################################
-## UPDATES ADDED TO THE GAME ######
-###################################
-### The Past ######################
-###################################
+#####################################
+## UPDATES ADDED TO THE GAME ########
+#####################################
+### The Past ########################
+#####################################
 - Started building The Game
 - Displayed maps correctly:
   - Walls
@@ -68,27 +68,27 @@
 - Added royalty free music
 - CSS made responsive
 
-###################################
-### 6/2/2016 ######################
-###################################
+#####################################
+### 6/2/2016 ########################
+#####################################
 - Deployed the game to heroku
 - Updated site title to 'The Hole'
 - Designed and added a favicon 
 - Created this README
 
-###################################
-### 6/3/2016 ######################
-###################################
+#####################################
+### 6/3/2016 ########################
+#####################################
 - Fixed formatting on README.md
 
-###################################
-### 6/4/2016 ######################
-###################################
+#####################################
+### 6/4/2016 ########################
+#####################################
 - Made the game work on mobile
 
-###################################
-### 6/5/2016 ######################
-###################################
+#####################################
+### 6/5/2016 ########################
+#####################################
 - Added MongoDB storage for users
   - post methods for:
   	- logging in
@@ -102,3 +102,11 @@
   - leaderboard is now global
 - disable user zoom on mobile
 - better position mobile controls
+
+#####################################
+### 6/6/2016 ########################
+#####################################
+- death count stats and achievement
+- no longer can hold down keys
+- removed enemy speed up after pause
+- display kills to next level

@@ -68,7 +68,6 @@
 			"maxHP":100,
 			"justDescended":false,
 			"kills":0,
-			"lvlUp":false,
 			"dmg":0,
 			"score":0,
 			"highScore":0,
@@ -84,7 +83,8 @@
 			"shadowMultiply":false,
 			"shadowShield":false,
 			"waterShield":false,
-			"interval":1000
+			"interval":1000,
+			"deaths":0
 		};
 		if (pass) {
 			playerStats.pass = pass;
@@ -103,12 +103,13 @@
 	var map = document.getElementById("map");
 	var elems = [];
 	var stats = document.getElementById("stats");
-	var state, battle, health, score, depth, level, tool, highScore;
+	var state, battle, health, score, depth, level, toNextLvl, tool, highScore;
 	var menu = document.getElementById('menu');
 	var info = document.getElementById('info');
 	var board = [];
 	var size;
 	var everySecond;
+	var justMoved;
 	var clear = true;
 	var music = document.getElementById('mp3');
 	var mute = function () {
@@ -283,11 +284,12 @@
 		}
 		pos = [Math.ceil((Math.random() * (size-2))),Math.ceil((Math.random() * (2*size-2)))];
  		generateFirstMap();
-		stats.innerHTML="<pre>Hero: "+pStats.name+"<br><span id='health'>HP: "+pStats.HP+"/"+pStats.maxHP+"</span><br>Score: <span id='score'>"+pStats.score+"</span>   High: <span id='highScore'>"+pStats.highScore+"</span><br>You have descended <span id='depth'>"+pStats.depth+"</span> floors<br>You brandish <span title='Does "+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].dmg)||0)+" damage' id='weapon'>"+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].name)||"a smile")+"</span><br>Your hero is level <span id='level'>"+pStats.lvl+"</span></pre><div id='state'></div><div id='battle'></div><div id='keys'></div>";
+		stats.innerHTML="<pre>Hero: "+pStats.name+"<br><span id='health'>HP: "+pStats.HP+"/"+pStats.maxHP+"</span><br>Score: <span id='score'>"+pStats.score+"</span>   High: <span id='highScore'>"+pStats.highScore+"</span><br>You have descended <span id='depth'>"+pStats.depth+"</span> floors<br>You brandish <span title='Does "+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].dmg)||0)+" damage' id='weapon'>"+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].name)||"a smile")+"</span><br>Your hero is level <span id='level'>"+pStats.lvl+"</span><br>(<span id='toNextLvl'>"+(1-pStats.kills+pStats.lvl*pStats.lvl)+"</span> kills to next level)</pre><div id='state'></div><div id='battle'></div><div id='keys'></div>";
 		state = document.getElementById('state');
 		battle = document.getElementById('battle');
 		health = document.getElementById('health');
 		level = document.getElementById('level');
+		toNextLvl = document.getElementById('toNextLvl');
 		tool = document.getElementById('weapon');
 		depth = document.getElementById('depth');
 		score = document.getElementById('score');
@@ -361,11 +363,11 @@
     	elems[((pos[1]+colch)+2*size*(pos[0]+rowch))].innerHTML = player;
     	pos = [pos[0]+rowch, pos[1]+colch];
     	if (prev == exit) {
-    		battle.innerHTML="";
-    		pStats.justDescended=true;
+    		battle.innerHTML = "";
+    		pStats.justDescended = true;
     		pStats.depth++;
     		getHit(-pStats.depth);
-    		depth.innerHTML=pStats.depth;
+    		depth.innerHTML = pStats.depth;
     		if (!(pStats.depth%10)) {
     			saveGame();
     			clear = false;
@@ -378,6 +380,15 @@
 	};
 	var keys =	function (e) {
 	    e = e || window.event;
+	    if (e.keyCode == 38 || e.keyCode == 87 || e.keyCode == 40 || e.keyCode == 83 || e.keyCode == 37 || e.keyCode == 65 || e.keyCode == 39 || e.keyCode == 68) {
+			if (justMoved == e.keyCode) {
+				return;
+			}
+			justMoved = e.keyCode;
+			window.onkeyup = function () { 
+        		justMoved = false;
+			};
+		}
 	    if ((e.keyCode == '38' || e.keyCode == 87) && board[pos[0]-1][pos[1]] != wall) {
 			moveplayer(-1,0);
 	    } else if ((e.keyCode == '40' || e.keyCode == 83) && board[pos[0]+1][pos[1]] != wall) {
@@ -392,13 +403,16 @@
 	    					   Press 'p' to resume.<br>\
 	    					   Press 'q' to quit to menu.<br>\
 	    					   Press 'm' to mute/unmute music.</p>";
+	    	var storEnemies = enemies;
+	    	enemies = [];
 	    	document.onkeydown = function (e) {
-	    		if (e.keyCode==80) {
+	    		if (e.keyCode == 80) {
 	    			state.innerHTML = "";
-	    			setInterval(update, pStats.interval);
-	    			document.onkeydown=keys;
-	    		} else if (e.keyCode==81) {
-	    			killPlayer();
+	    			enemies = storEnemies;
+	    			everySecond = setInterval(update, pStats.interval);
+	    			document.onkeydown = keys;
+	    		} else if (e.keyCode == 81) {
+	    			killPlayer(1);
 	    			showMenu();
 	    		} else if (e.keyCode == 77) {
 	    			mute();
@@ -410,30 +424,30 @@
 	};
 	var moveEnemy = function (i, rowch, colch) {
 		if (board[enemies[i].row+rowch][enemies[i].col+colch] == player) {
-			enemies[i].inBattle=[rowch,colch];
+			enemies[i].inBattle = [rowch,colch];
 		} else {
-			board[enemies[i].row][enemies[i].col]=enemies[i].prev;
+			board[enemies[i].row][enemies[i].col] = enemies[i].prev;
 			var enemyspec = elems[enemies[i].col+enemies[i].row*2*size].innerHTML;
 			elems[enemies[i].col+enemies[i].row*2*size].innerHTML = enemies[i].prev;
 			enemies[i].prev = board[enemies[i].row+rowch][enemies[i].col+colch];
 			board[enemies[i].row+rowch][enemies[i].col+colch] = enemy;
 			elems[enemies[i].col+colch+(enemies[i].row+rowch)*2*size].innerHTML = enemyspec;
-			enemies[i].row+=rowch;
-			enemies[i].col+=colch;
+			enemies[i].row += rowch;
+			enemies[i].col += colch;
 		}
 	};
 	var killEnemy = function (i) {
 		if (enemies[i].lvl == "Shadow") {
-			pStats.score*=2;
+			pStats.score *= 2;
 		} else {
-			pStats.score+=enemies[i].maxHP;
+			pStats.score += enemies[i].maxHP;
 		}
 		pStats.typesKilled[Math.floor(enemies[i].lvl/10)%8] = true;
-		score.innerHTML=pStats.score;
-		if (enemies[i].prev==enemy) {
-			enemies[i].prev=path;
+		score.innerHTML = pStats.score;
+		if (enemies[i].prev == enemy) {
+			enemies[i].prev = path;
 		}
-		board[enemies[i].row][enemies[i].col]=enemies[i].prev;
+		board[enemies[i].row][enemies[i].col] = enemies[i].prev;
 		elems[enemies[i].col+enemies[i].row*2*size].innerHTML = enemies[i].prev;
 		enemies.splice(i,1);
 		if (!enemies.length) {
@@ -442,8 +456,12 @@
 			getHit(-pStats.lvl);
 		}
 		if (++pStats.kills > pStats.lvl*pStats.lvl) {
-			pStats.lvlUp=true;
+			getHit(-(++pStats.lvl));
+			clear = false;
+			state.innerHTML = "<p><br>You have leveled up!<br>You are now level "+pStats.lvl+"</p>";
+			level.innerHTML = pStats.lvl;
 		}
+		toNextLvl.innerHTML = (1-pStats.kills+pStats.lvl*pStats.lvl);
 	};
 	var getHit = function (damage) {
 		if (damage > 0 && prev!=water) {
@@ -462,14 +480,17 @@
 			killPlayer();
 		}
 	};
-	var killPlayer = function () {
+	var killPlayer = function (quit) {
 		clearInterval(everySecond);
-		document.onkeydown= function (e) {
-			if (e.keyCode==82) {
+		if (isMobile) {
+			document.getElementById('keys').innerHTML = "";
+		}
+		document.onkeydown = function (e) {
+			if (e.keyCode == 82) {
 				restart();
-			} else if (e.keyCode==84) {
+			} else if (e.keyCode == 84) {
 				restart(1);
-			} else if (e.keyCode==77) {
+			} else if (e.keyCode == 77) {
 				showMenu();
 			}
 		};
@@ -480,15 +501,18 @@
 		if (pStats.currentWeapon > pStats.weaponsFound) {
 			pStats.weaponsFound = pStats.currentWeapon;
 		}
-		pStats.currentWeapon=0;
-		pStats.depth=(pStats.skip*10);
+		pStats.currentWeapon = 0;
+		pStats.depth = (pStats.skip*10);
 		pStats.dmg = 0;
 		pStats.HP = pStats.maxHP;
+		if (!quit) {
+			pStats.deaths++;
+		}
 		saveGame();
 		state.innerHTML = "<p id='dead'><br>You have died</p>\
-						   <p>Press 'r' to restart<br>\
-						   Press 't' to trade score for max HP boost<br>\
-						   Press 'm' to access the menu</p>";		
+						   <p><span onclick='restart();'>Press 'r' to restart</span><br>\
+						   <span onclick='restart(1);'>Press 't' to trade score for max HP boost</span><br>\
+						   <span onclick='showMenu();'>Press 'm' to access the menu</span></p>";		
 	};
 	var update = function () {
 		pStats.time++;
@@ -501,18 +525,12 @@
 			} else {
 				pStats.justDescended = false;
 			}
-		} else if (pStats.lvlUp) {
-			pStats.lvlUp=false;
-			getHit(-(++pStats.lvl));
-			clear = false;
-			state.innerHTML = "<p><br>You have leveled up!<br>You are now level "+pStats.lvl+"</p>";
-			level.innerHTML = pStats.lvl;
 		} else if (clear) {
 			if (!(pStats.depth%10)) {
-				if (!(pStats.depth-pStats.skip*10)) {
-					state.innerHTML="<p><br>You begin your descent</p>";
+				if (!(pStats.depth - pStats.skip*10)) {
+					state.innerHTML = "<p><br>You begin your descent</p>";
 				} else {
-					state.innerHTML="<p><br>You have reached a checkpoint.<br>Take a breather.</p>";
+					state.innerHTML = "<p><br>You have reached a checkpoint.<br>Take a breather.</p>";
 				}
 			} else {
 				state.innerHTML = "";
@@ -563,9 +581,8 @@
 						<br>This also hopefully will come along with a plot of some kind maybe.</p>\
 						<p>The rooms are randomly generated, according to an algorithm I developed,\
 						<br>and thus the game is currently infinite.</p>\
-						<p>I am open to suggestions, if anyone has any ideas feel free to contact me.\
-						<br>The fact that you have this version of the game means you have my number,\
-						<br>in the future I'll try to put some secure way to contact me here, for strangers.</p>\
+						<p>I am open to suggestions, if anyone has any ideas feel free to contact me\
+						<br>at down.the.hole.we.all.go@gmail.com</p>\
 						<p>Music from https://www.youtube.com/watch?v=uJqq7BqXEYQ</p>\
 						<p>Thanks for playing!</p>\
 						<p id='warning'><br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>|<br>\
@@ -585,6 +602,10 @@
 		html += "<br><br>";
 		for (var i = 0; i < 8; i++) {
 			html += "<span class='"+(pStats.maxDepth>=Math.floor(Math.pow(3,1.5*i)))+"' title='descend "+Math.floor(Math.pow(3,1.5*i))+" floors'>["+Math.floor(Math.pow(3,1.5*i))+"F]</span>  ";
+		}
+		html += "<br><br>";
+		for (var i = 0; i < 8; i++) {
+			html += "<span class='"+(pStats.deaths>=Math.floor(Math.pow(1.5,3*i)))+"' title='die "+Math.floor(Math.pow(1.5,3*i))+" times'>["+Math.floor(Math.pow(1.5,3*i))+"D]</span>  ";
 		}
 		html += "<br><br>";
 		for (var i = 0; i < weapons.length; i++) {
@@ -613,7 +634,7 @@
 		info.innerHTML = html;
 	};
 	var showData = function () {
-		info.innerHTML="<h1>Player Data</h1><pre>Hero Name:   "+pStats.name+"<br>Hero Level:  "+pStats.lvl+"<br>Max HP:      "+pStats.HP+"<br>Score:       "+pStats.score+"<br>High Score:  "+pStats.highScore+"<br>Deepest Run: "+pStats.maxDepth+"<br>Enemy Kills: "+pStats.kills+"<br>Time Played: "+pStats.time+"s</pre>";
+		info.innerHTML="<h1>Player Data</h1><pre>Hero Name:   "+pStats.name+"<br>Hero Level:  "+pStats.lvl+"<br>Max HP:      "+pStats.HP+"<br>Score:       "+pStats.score+"<br>High Score:  "+pStats.highScore+"<br>Deepest Run: "+pStats.maxDepth+"<br>Enemy Kills: "+pStats.kills+"<br>Death Toll: "+pStats.deaths+"<br>Time Played: "+pStats.time+"s</pre>";
 	};
 	var showShop = function () {
 		info.innerHTML="<h1>Shop</h1>\
@@ -713,9 +734,7 @@
 						<br>100 plus the square root of your highest recorded score.\
 						<br>If you press 't' and your score is not greater than your highest score recorded,\
 						<br>you will receive no bonus and lose your score.</p>\
-						<p>If you add a querystring parameter 'name' to the url, you can customize the name.\
-						<br>Your save account is based on this name-- Fred by default.\
-						<br>The query string paramter 'size' will change the size of the map.\
+						<p>The query string paramter 'size' will change the size of the map.\
 						<br>(Game quality not guaranteed)</p>\
 						<p>I don't think anyone even reads these things...</p>";
 	};
@@ -800,7 +819,9 @@
 			 			pStats = newUser(name, pass);
 			 		}
 				localStorage.prevLogin = JSON.stringify(pStats);
-				window.location.href = window.location.origin+"?name="+pStats.name;
+				player = "<span title='player' class='player'>"+pStats.name[0]+"</span>";
+				intro();
+				//window.location.href = window.location.origin+"?name="+pStats.name;
 		 		}
 		 	}
 			xhr.open('POST', "/changeUser", true);
@@ -818,7 +839,7 @@
 		menu.innerHTML="";
 		info.innerHTML="<p>Enter your username and password:<br>\
 						<input type='text' id='user' autofocus><br>\
-						<input type='text' id='pass' autofocus><br>\
+						<input type='text' id='pass'><br>\
 						<span onclick='login();'>[Submit]</span></p>\
 						<h6>Note: If you do not yet have an account, this form will create an account for you.</h6>";
 	};
@@ -834,6 +855,7 @@
 	var letUsBegin = function () {
 		if (localStorage.prevLogin && JSON.parse(localStorage.prevLogin).pass) {
 			pStats = JSON.parse(localStorage.prevLogin);
+			player = "<span title='player' class='player'>"+pStats.name[0]+"</span>";
 		}
 		intro();
 	}();
