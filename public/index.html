@@ -440,6 +440,13 @@
 			enemies[i].col += colch;
 		}
 	};
+	var toLevelUp = function () {
+		var toLvl = 0;
+		for (var i = 0; i <= pStats.lvl; i++) {
+			toLvl += pStats.lvl*pStats.lvl;
+		}
+		return toLvl;
+	};
 	var killEnemy = function (i) {
 		if (enemies[i].lvl == "Shadow") {
 			pStats.score *= 2;
@@ -459,13 +466,13 @@
 			state.innerHTML = "<p>Room Clear Bonus: +"+pStats.lvl+" HP!</p>";
 			getHit(-pStats.lvl);
 		}
-		if (++pStats.kills > pStats.lvl*pStats.lvl) {
+		if (++pStats.kills > toLevelUp()) {
 			getHit(-(++pStats.lvl));
 			clear = false;
 			state.innerHTML = "<p><br>You have leveled up!<br>You are now level "+pStats.lvl+"</p>";
 			level.innerHTML = pStats.lvl;
 		}
-		toNextLvl.innerHTML = (1-pStats.kills+pStats.lvl*pStats.lvl);
+		toNextLvl.innerHTML = (1-pStats.kills+toLevelUp());
 	};
 	var getHit = function (damage) {
 		if (damage > 0 && prev!=water) {
@@ -727,7 +734,7 @@
 	var showHints = function () {
 		info.innerHTML="<h1>Hints</h1>\
 						<h3>Basic:</h3>\
-						<p>If you just wanna see the tutorial again, click <span onclick='intro(1);'>[here]</span>.</p>\
+						<p>If you just wanna see the tutorial again, click <span onclick='menu.innerHTML=\"\";intro(1);'>[here]</span>.</p>\
 						<p>To attack an enemy, just walk into it.</p>\
 						<p>You sink, but you also swim. If you move off of a water block\
 						<br>within a fraction of a second, you won't be hurt.</p>\
@@ -817,6 +824,7 @@
 			} else {
 				if (menu) {
 					showMenu();
+					showHints();
 				} else {
 					restart();
 				}

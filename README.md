@@ -16,7 +16,6 @@
 - Quests
 - Prayer
 - create better tutorial
-- alow players to re see tutorial
 - make the enemies stop running into walls forever
 - add Title attr for everything
 - leaderboard position in player data
@@ -119,3 +118,4 @@
 - click on menu items
 - added mobile pause button
 - allow reaccess to intro
+- changed lvlUp mechanic
