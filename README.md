@@ -117,3 +117,5 @@
 - added shop item:
   - allow switch for move key holding
 - click on menu items
+- added mobile pause button
+- allow reaccess to intro
