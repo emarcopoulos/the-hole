@@ -16,10 +16,10 @@
 - Quests
 - Prayer
 - create better tutorial
+- alow players to re see tutorial
 - make the enemies stop running into walls forever
 - add Title attr for everything
 - leaderboard position in player data
-- allow clicking menu options
 - Shop
 	- strong enemies
 	- change enemy interval
@@ -110,3 +110,10 @@
 - no longer can hold down keys
 - removed enemy speed up after pause
 - display kills to next level
+
+#####################################
+### 6/7/2016 ########################
+#####################################
+- added shop item:
+  - allow switch for move key holding
+- click on menu items

@@ -84,7 +84,8 @@
 			"shadowShield":false,
 			"waterShield":false,
 			"interval":1000,
-			"deaths":0
+			"deaths":0,
+			"stickyKeys":true
 		};
 		if (pass) {
 			playerStats.pass = pass;
@@ -295,7 +296,7 @@
 		score = document.getElementById('score');
 		highScore = document.getElementById('highScore');
 		if (isMobile) {
-			document.getElementById('keys').innerHTML = "<div id='horz'><button type='button' onclick='\
+			document.getElementById('keys').innerHTML = "<button type='button' onclick='pauseGame();'<div id='horz'><button type='button' onclick='\
 				if (board[pos[0]][pos[1]-1] != wall) {\
 					moveplayer(0,-1);\
 				}\
@@ -380,7 +381,7 @@
 	};
 	var keys =	function (e) {
 	    e = e || window.event;
-	    if (e.keyCode == 38 || e.keyCode == 87 || e.keyCode == 40 || e.keyCode == 83 || e.keyCode == 37 || e.keyCode == 65 || e.keyCode == 39 || e.keyCode == 68) {
+	    if (pStats.stickyKeys && (e.keyCode == 38 || e.keyCode == 87 || e.keyCode == 40 || e.keyCode == 83 || e.keyCode == 37 || e.keyCode == 65 || e.keyCode == 39 || e.keyCode == 68)) {
 			if (justMoved == e.keyCode) {
 				return;
 			}
@@ -398,29 +399,32 @@
 	    } else if ((e.keyCode == '39' || e.keyCode == 68) && board[pos[0]][pos[1]+1] != wall) {
 	    	moveplayer(0,1);
 	    } else if (e.keyCode == 80) {
-	    	clearInterval(everySecond);
-	    	state.innerHTML = "<p>The game is paused.<br>\
-	    					   Press 'p' to resume.<br>\
-	    					   Press 'q' to quit to menu.<br>\
-	    					   Press 'm' to mute/unmute music.</p>";
-	    	var storEnemies = enemies;
-	    	enemies = [];
-	    	document.onkeydown = function (e) {
-	    		if (e.keyCode == 80) {
-	    			state.innerHTML = "";
-	    			enemies = storEnemies;
-	    			everySecond = setInterval(update, pStats.interval);
-	    			document.onkeydown = keys;
-	    		} else if (e.keyCode == 81) {
-	    			killPlayer(1);
-	    			showMenu();
-	    		} else if (e.keyCode == 77) {
-	    			mute();
-	    		}
-	    	}
+			pauseGame();
 	    } else if (e.keyCode == 77) {
 	    	mute();
 	    }
+	};
+	var pauseGame = function () {
+    	clearInterval(everySecond);
+    	state.innerHTML = "<p>The game is paused.<br>\
+    					   Press 'p' to resume.<br>\
+    					   Press 'q' to quit to menu.<br>\
+    					   Press 'm' to mute/unmute music.</p>";
+    	var storEnemies = enemies;
+    	enemies = [];
+    	document.onkeydown = function (e) {
+    		if (e.keyCode == 80) {
+    			state.innerHTML = "";
+    			enemies = storEnemies;
+    			everySecond = setInterval(update, pStats.interval);
+    			document.onkeydown = keys;
+    		} else if (e.keyCode == 81) {
+    			killPlayer(1);
+    			showMenu();
+    		} else if (e.keyCode == 77) {
+    			mute();
+    		}
+    	}
 	};
 	var moveEnemy = function (i, rowch, colch) {
 		if (board[enemies[i].row+rowch][enemies[i].col+colch] == player) {
@@ -685,7 +689,15 @@
 								saveGame();\
 								showShop();\
 							}\
-						' title='Skip to floor "+((pStats.skip+1)*10)+" (costs "+(5000*(pStats.skip+1))+" score)'>[->"+((pStats.skip+1)*10)+"]</p>";
+						' title='Skip to floor "+((pStats.skip+1)*10)+" (costs "+(5000*(pStats.skip+1))+" score)'>[->"+((pStats.skip+1)*10)+"]</p>\
+						<p class='"+(pStats.score >= 500000)+"' onclick='\
+							if (pStats.score >= 500000) {\
+								pStats.score -= 500000;\
+								pStats.stickyKeys = !pStats.stickyKeys;\
+								saveGame();\
+								showShop();\
+							}\
+						' title='"+((pStats.stickyKeys&&'')||'re')+"move repeatedly "+((pStats.stickyKeys&&'')||'moving ')+"when holding arrow keys (costs "+(500000)+" score)'>[>>>]</p>";
 	};
 	var showBoard = function () {
 		var html = "<h1>Leaderboard</h1>";
@@ -718,6 +730,7 @@
 						<p>To attack an enemy, just walk into it.</p>\
 						<p>You sink, but you also swim. If you move off of a water block\
 						<br>within a fraction of a second, you won't be hurt.</p>\
+						<p>To move twice as fast try using the wasd and arrow keys at the same time</p>\
 						<p>Your hero level is determined by the amount of enemies you kill, so keep fighting.</p>\
 						<p>Your highScore updates when you trade in your score for a MaxHP boost,\
 						<br>so to keep track of a record, trade it in!</p>\
@@ -744,7 +757,7 @@
 	var showMenu = function () {
 		map.innerHTML="";
 		stats.innerHTML="";
-		menu.innerHTML="<pre>Press:<br>     'i' for info<br>     'a' for achievements<br>     's' for shop<br>     'd' for player data<br>     'q' for quests<br>     'l' for leaderboard<br>     'h' for hints<br><br>'r' to restart<br>'t' to trade score for Max HP boost<br><br>'u' to change user<br>'m' to mute/unmute music</pre>";
+		menu.innerHTML="<pre>Press:<br>     <span onclick='showInfo();'>'i' for info</span><br>     <span onclick='showAchievements();'>'a' for achievements</span><br>     <span onclick='showShop();'>'s' for shop</span><br>     <span onclick='showData();'>'d' for player data</span><br>     <span onclick='showQuests();'>'q' for quests</span><br>     <span onclick='showBoard();'>'l' for leaderboard</span><br>     <span onclick='showHints();'>'h' for hints</span><br><br><span onclick='menu.innerHTML=\"\";restart();'>'r' to restart</span><br><span onclick='menu.innerHTML=\"\";restart(1);'>'t' to trade score for Max HP boost</span><br><br><span onclick='changeUser();'>'u' to change user</span><br><span onclick='mute();'>'m' to mute/unmute music</span></pre>";
 		document.onkeydown = function (e) {
 			if (e.keyCode == 73) {
 				showInfo();
