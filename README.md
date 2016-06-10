@@ -26,6 +26,9 @@
 	- Make shadow killer achievement
 	- Death by shadow
 	- Dying a lot achievement
+- Update system for database on index.js
+- water based on percent of health
+- fix bugs with kills
 
 #####################################
 ## UPDATES ADDED TO THE GAME ########
