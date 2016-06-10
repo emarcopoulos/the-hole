@@ -29,11 +29,11 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
-	res.send("<p>Sorry, The Game is not available at this time.</p>");
-	//res.send(__dirname + '/index.html');
+	//res.send("<p>Sorry, The Game is not available at this time.</p>");
+	res.send(__dirname + '/index.html');
 });
 
-/*app.post('/saveGame', function (req, res) {
+app.post('/saveGame', function (req, res) {
 	var pStats = JSON.parse(req.body.pStats);
 	if (pStats) {
 		if (pStats.pass) {
@@ -70,7 +70,7 @@ app.post('/changeUser', function (req, res) {
 			res.send("newUser");
 		}
 	});
-});*/
+});
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
