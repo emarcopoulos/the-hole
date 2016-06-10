@@ -33,7 +33,7 @@ app.get('/', function (req, res) {
 	res.send(__dirname + '/index.html');
 });
 
-app.post('/saveGame', function (req, res) {
+/*app.post('/saveGame', function (req, res) {
 	var pStats = JSON.parse(req.body.pStats);
 	if (pStats) {
 		if (pStats.pass) {
@@ -48,7 +48,7 @@ app.post('/saveGame', function (req, res) {
 	} else {
 		res.sendStatus(400);
 	}
-});
+});*/
 
 app.get('/allStats', function (req, res) {
 	db.collection('users').find().toArray(function (err, cursor) {
