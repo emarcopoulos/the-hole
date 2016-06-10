@@ -29,7 +29,8 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
-	res.send(__dirname + '/index.html');
+	res.send("<p>Sorry, The Game is not available at this time.</p>");
+	//res.send(__dirname + '/index.html');
 });
 
 /*app.post('/saveGame', function (req, res) {
@@ -47,7 +48,7 @@ app.get('/', function (req, res) {
 	} else {
 		res.sendStatus(400);
 	}
-});*/
+});
 
 app.get('/allStats', function (req, res) {
 	db.collection('users').find().toArray(function (err, cursor) {
@@ -69,7 +70,7 @@ app.post('/changeUser', function (req, res) {
 			res.send("newUser");
 		}
 	});
-});
+});*/
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
