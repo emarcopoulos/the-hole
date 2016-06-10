@@ -27,7 +27,6 @@
 	- Death by shadow
 	- Dying a lot achievement
 - Update system for database on index.js
-- water based on percent of health
 - fix bugs with kills
 
 #####################################
@@ -121,4 +120,9 @@
 - click on menu items
 - added mobile pause button
 - allow reaccess to intro
+- changed lvlUp mechanic
+
+#####################################
+### 6/10/2016 #######################
+#####################################
 - changed lvlUp mechanic
