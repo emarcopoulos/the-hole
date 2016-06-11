@@ -79,6 +79,7 @@ var pStats = newUser(qString["name"]||"Fred");
 var allStats;
 var player = "<span title='player' class='player'>"+pStats.name[0]+"</span>";
 var enemy = "<span title='enemy' class='enemy'>*</span>";
+var stillEnemies = false;
 var enemies = [];
 var start = "<span title='startPoint' class='start'>o</span>";
 var prev;
@@ -98,10 +99,10 @@ var clear = true;
 var music = document.getElementById('mp3');
 var mute = function () {
 	if (music.paused) {
-		pStats.mute=false;
+		pStats.mute = false;
 		music.play();
 	} else {
-		pStats.mute=true;
+		pStats.mute = true;
 		music.pause();
 	}
 };
@@ -112,8 +113,8 @@ var dispBoard = function () {
 			if (board[i][j] == enemy) {
 				for (var k = 0; k < enemies.length; k++) {
 					if (enemies[k].row == i && enemies[k].col == j) {
-						if (enemies[k].lvl == "shadow") {
-							html += "<span id="+(j+2*size*i)+"><span class='type8'>"+enemy+"</span></span>";
+						if (Object.prototype.toString.call(enemies[k].lvl) == '[object String]') {
+							html += "<span id="+(j+2*size*i)+"><span class='"+enemies[k].lvl+"'>"+enemy+"</span></span>";
 						} else {
 							html += "<span id="+(j+2*size*i)+"><span class='type"+Math.floor(enemies[k].lvl/10)%8+"'>"+enemy+"</span></span>";
 						}
@@ -142,7 +143,11 @@ var placeWeapon = function () {
 		board[r][c] = weapon;
 	}
 };
+var newEnemy = function (r, c, HP, lvl, dmg) {
+	return {"row":r,"col":c,"inBattle":undefined,"HP":HP,"maxHP":HP,"lvl":lvl,"maxDmg":dmg,"prev":board[r][c]};
+};
 var placeEnemies = function () {
+	enemies = [];
 	for (var i = 0; i < pStats.depth; i++) {
 		if (pStats.depth-i>40) {
 			continue;
@@ -153,17 +158,56 @@ var placeEnemies = function () {
 			c = Math.ceil((Math.random() * (2*size-2)));
 		} while (board[r][c] == wall || board[r][c] == enemy || board[r][c] == player);
 		if (Math.random()<.001) {
-			enemies[i%40] = {"row":r,"col":c,"inBattle":undefined,"HP":1000+pStats.lvl,"maxHP":1000+pStats.lvl*pStats.multiply,"lvl":"Shadow","maxDmg":pStats.maxHP,"prev":board[r][c]}
+			enemies[i%40] = newEnemy(r,c,1000+pStats.lvl*pStats.multiply,"Shadow",pStats.maxHP);
 		} else {
-			enemies[i%40] = {"row":r,"col":c,"inBattle":undefined,"HP":i*3+5,"maxHP":i*3+5,"lvl":i*2,"maxDmg":i*2+1,"prev":board[r][c]};
+			enemies[i%40] = newEnemy(r,c,i*3+5,i*2,i*2+1);
 		}
 		board[r][c] = enemy;
 	}
 };
-var fillMap = function (run) {
+var smileyBoss = function () {
+	stillEnemies = true;
+	fillMap(0);
+	var exitPlaced = false;
+	pos = [17,27];
+	prev = start;
+	board[pos[0]][pos[1]] = player;
+	board[pos[0]][pos[1]] = player;
+	for (var i = 3; i <= 8; i++) {
+		if (!exitPlaced && Math.random() < .08) {
+			board[i][(13&&Math.random()<.5)||24] = exit;
+			exitPlaced = true;
+		}
+		enemies[enemies.length] = newEnemy(i,24,Math.floor(Math.random() * 10) + pStats.depth * 2,"eye", pStats.depth * 2 + 1);
+		enemies[enemies.length] = newEnemy(i,13,Math.floor(Math.random() * 10) + pStats.depth * 2,"eye", pStats.depth * 2 + 1);
+		board[i][13] = enemy;
+		board[i][24] = enemy;
+	}
+	var coors = [[8,4],[9,4],[10,4],[11,4],[12,4],[12,5],[12,6],[12,7],[13,7],[13,8],[13,9],[14,9],[14,10],[14,11],[14,12],[14,13],[14,14],[14,15],[14,16],[14,17],[14,18],[14,19],[14,20],[14,21],[14,22],[14,23],[14,24],[14,25],[14,26],[14,27],[14,28],[14,29],[13,29],[13,30],[12,30],[12,31],[11,31],[11,32],[10,32],[9,32],[8,32],[7,32]];
+	for (var i = 0; i < coors.length; i++) {
+		if (!exitPlaced && Math.random() < .08) {
+			board[coors[i][0]][coors[i][1]] = exit;
+			exitPlaced = true;
+		}
+		enemies[enemies.length] = newEnemy(coors[i][0],coors[i][1],Math.floor(Math.random() * 10) + pStats.depth * 2,"smiley", pStats.depth * 2 + 1);
+		board[coors[i][0]][coors[i][1]] = enemy;
+	}
+	if (!exitPlaced) {
+		board[15][18] = exit;
+	}
+	for (var i = 15; i <= 17; i++) {
+		for (var j = 15; j <= 20; j++) {
+			enemies[enemies.length] = newEnemy(i,j,Math.floor(Math.random() * 10) + pStats.depth * 2,"tongue", pStats.depth * 2 + 1);
+			board[i][j] = enemy;
+		}
+	}
+	dispBoard();
+};
+var generateBoss = [smileyBoss];
+var fillMap = function (walls) {
 	for (var i = 0; i < size; i++) {
 		for (var j = 0; j < 2*size; j++) {
-			if (!run && i && (i-size+1) && j && (j-2*size+1)) {
+			if (!walls && i && (i-size+1) && j && (j-2*size+1)) {
 				board[i][j] = path;
 			} else {
 				board[i][j] = wall;
@@ -173,9 +217,9 @@ var fillMap = function (run) {
 };
 var createRoom = function (row, col, hole) {
 	var exitPlaced = false;
-	var radius = Math.floor(Math.random()*3)+2;
-	var wateRoom = Math.random()<.01;
-	for (var i = row-radius; i < row + radius; i++) {
+	var radius = Math.floor(Math.random() * 3) + 2;
+	var wateRoom = Math.random() < .01;
+	for (var i = row - radius; i < row + radius; i++) {
 		if (i > 0 && i < size - 1) {
 			for (var j = col - 2*radius; j < col + 2*radius; j++) {
 				if (j > 0 && j < 2*size-1) {
@@ -192,7 +236,7 @@ var createRoom = function (row, col, hole) {
 		}
 	}
 	if (hole && !exitPlaced) {
-		board[row][col]=exit;
+		board[row][col] = exit;
 	}
 };
 var placeEntities = function (checkpoint) {
@@ -237,6 +281,7 @@ var connectRooms = function (r1,c1,r2,c2) {
 }
 var generateMap = function() {
 	fillMap(1);
+	stillEnemies = false;
 	createRoom(pos[0],pos[1], false);
 	for (var i = Math.ceil(Math.random()*size/5); i; i--) {
 		var r = Math.floor(Math.random()*(size-2))+1;
@@ -253,7 +298,7 @@ var generateMap = function() {
 	}
 	dispBoard();
 };
-var generateFirstMap = function () {
+var generateCheckMap = function () {
 	fillMap(0);
 	board[Math.ceil((Math.random() * (size-2)))][Math.ceil((Math.random() * (2*size-2)))] = water;
 	placeEntities(1);
@@ -267,7 +312,7 @@ var init = function () {
 		board[i] = [];
 	}
 	pos = [Math.ceil((Math.random() * (size-2))),Math.ceil((Math.random() * (2*size-2)))];
-	generateFirstMap();
+	generateCheckMap();
 	stats.innerHTML="<pre>Hero: "+pStats.name+"<br><span id='health'>HP: "+pStats.HP+"/"+pStats.maxHP+"</span><br>Score: <span id='score'>"+pStats.score+"</span>   High: <span id='highScore'>"+pStats.highScore+"</span><br>You have descended <span id='depth'>"+pStats.depth+"</span> floors<br>You brandish <span title='Does "+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].dmg)||0)+" damage' id='weapon'>"+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].name)||"a smile")+"</span><br>Your hero is level <span id='level'>"+pStats.lvl+"</span><br>(<span id='toNextLvl'>"+(1-pStats.kills+toLevelUp())+"</span> kills to next level)</pre><div id='state'></div><div id='battle'></div><div id='keys'></div>";
 	state = document.getElementById('state');
 	battle = document.getElementById('battle');
@@ -352,11 +397,13 @@ var moveplayer = function (rowch, colch) {
 		pStats.depth++;
 		getHit(-pStats.depth);
 		depth.innerHTML = pStats.depth;
-		if (!(pStats.depth%10)) {
+		if (!(((pStats.depth+1)/2)%10)) {
+			generateBoss[((pStats.depth+1)/20-1)%generateBoss.length]();
+		} else if (!(pStats.depth%10)) {
 			saveGame();
 			clear = false;
 			state.innerHTML="<p>Game Saved</p>"
-			generateFirstMap();
+			generateCheckMap();
 		} else {
 			generateMap();
 		}
@@ -412,7 +459,7 @@ var pauseGame = function () {
 var moveEnemy = function (i, rowch, colch) {
 	if (board[enemies[i].row+rowch][enemies[i].col+colch] == player) {
 		enemies[i].inBattle = [rowch,colch];
-	} else {
+	} else if (!stillEnemies) {
 		board[enemies[i].row][enemies[i].col] = enemies[i].prev;
 		var enemyspec = elems[enemies[i].col+enemies[i].row*2*size].innerHTML;
 		elems[enemies[i].col+enemies[i].row*2*size].innerHTML = enemies[i].prev;
