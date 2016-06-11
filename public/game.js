@@ -27,6 +27,7 @@ var wall = "<span title='wall' class='wall'>#</span>";
 var water = "<span title='water' class='water'>~</span>";
 var path = "<span title='path' class='path'>-</span>";
 var weapon = "<span title='new weapon' class='weapon'>/</span>";
+var HPack = "<span title='HP pack' class='HPack'>+</span>";
 var weapons = [{"name":"a fist","dmg":1},
 			   {"name":"brass knuckles","dmg":2},
 			   {"name":"a bat","dmg":3},
@@ -166,20 +167,26 @@ var placeEnemies = function () {
 	}
 };
 var smileyBoss = function () {
+	enemies = [];
 	stillEnemies = true;
 	fillMap(0);
 	var exitPlaced = false;
 	pos = [17,27];
 	prev = start;
-	board[pos[0]][pos[1]] = player;
-	board[pos[0]][pos[1]] = player;
+	board[17][27] = player;
+	board[1][3] = HPack;
+	board[3][3] = HPack;
+	board[2][6] = HPack;
+	board[1][34] = HPack;
+	board[2][37] = HPack;
+	board[3][35] = HPack;
 	for (var i = 3; i <= 8; i++) {
 		if (!exitPlaced && Math.random() < .08) {
 			board[i][(13&&Math.random()<.5)||24] = exit;
 			exitPlaced = true;
 		}
-		enemies[enemies.length] = newEnemy(i,24,Math.floor(Math.random() * 10) + pStats.depth * 2,"eye", pStats.depth * 2 + 1);
-		enemies[enemies.length] = newEnemy(i,13,Math.floor(Math.random() * 10) + pStats.depth * 2,"eye", pStats.depth * 2 + 1);
+		enemies[enemies.length] = newEnemy(i,24,Math.floor(Math.random() * 10) + pStats.depth,"eye", pStats.depth/3 + 1);
+		enemies[enemies.length] = newEnemy(i,13,Math.floor(Math.random() * 10) + pStats.depth,"eye", pStats.depth/3 + 1);
 		board[i][13] = enemy;
 		board[i][24] = enemy;
 	}
@@ -189,7 +196,7 @@ var smileyBoss = function () {
 			board[coors[i][0]][coors[i][1]] = exit;
 			exitPlaced = true;
 		}
-		enemies[enemies.length] = newEnemy(coors[i][0],coors[i][1],Math.floor(Math.random() * 10) + pStats.depth * 2,"smiley", pStats.depth * 2 + 1);
+		enemies[enemies.length] = newEnemy(coors[i][0],coors[i][1],Math.floor(Math.random() * 10) + pStats.depth,"smiley", pStats.depth/3 + 1);
 		board[coors[i][0]][coors[i][1]] = enemy;
 	}
 	if (!exitPlaced) {
@@ -197,7 +204,7 @@ var smileyBoss = function () {
 	}
 	for (var i = 15; i <= 17; i++) {
 		for (var j = 15; j <= 20; j++) {
-			enemies[enemies.length] = newEnemy(i,j,Math.floor(Math.random() * 10) + pStats.depth * 2,"tongue", pStats.depth * 2 + 1);
+			enemies[enemies.length] = newEnemy(i,j,Math.floor(Math.random() * 10) + pStats.depth,"tongue", pStats.depth/3 + 1);
 			board[i][j] = enemy;
 		}
 	}
@@ -407,6 +414,9 @@ var moveplayer = function (rowch, colch) {
 		} else {
 			generateMap();
 		}
+	} else if (prev == HPack) {
+		getHit(pStats.HP - pStats.maxHP);
+		prev = path;
 	}
 };
 var keys =	function (e) {
