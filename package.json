@@ -10,7 +10,8 @@
     "express": "latest",
     "body-parser": "latest",
     "mongodb": "latest",
-    "ejs": "latest"
+    "ejs": "latest",
+    "bcrypt":"latest"
   },
   "repository": {
     "type": "git",

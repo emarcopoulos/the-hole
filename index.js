@@ -5,6 +5,8 @@ var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient, format = require('util').format;
 var ObjectId = require('mongodb').ObjectId;
 var mongoUri = "mongodb://heroku_m4c5l1x1:n1q59l0vq10d5njkjc8hdgnig3@ds023613.mlab.com:23613/heroku_m4c5l1x1";
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -44,12 +46,15 @@ app.post('/saveGame', function (req, res) {
 	var pStats = JSON.parse(req.body.pStats);
 	if (pStats) {
 		if (pStats.pass) {
-			var toInsert = {name:pStats.name, pass:(pStats.pass), pStats:pStats};
-			db.collection('users').update(
-				{$and:[{name:pStats.name},{pass:pStats.pass}]},
-				toInsert,
-				{upsert:true}
-			);
+			bcrypt.hash(pStats.pass, saltRounds, function(err, hash) {
+				delete pStats.pass;
+				var toInsert = {name:pStats.name, hash:hash, pStats:pStats};
+				db.collection('users').update(
+					{$and:[{name:pStats.name},{hash:hash}]},
+					toInsert,
+					{upsert:true}
+				);
+			});
 		}
 		if (pStats.v != 2.5) {
 			res.send("update");
@@ -74,12 +79,15 @@ app.get('/allStats', function (req, res) {
 });
 
 app.post('/changeUser', function (req, res) {
-	db.collection('users').findOne({$and:[{name:req.body.user},{pass:req.body.pass}]}, function (err, doc) {
-		if (doc) {
-			res.send(doc.pStats);
-		} else {
-			res.send("newUser");
+	db.collection('users').find({name:req.body.user}).toArray(function (err, cursor) {
+		for (var i = 0; i < cursor.length; i++) {
+			if (bcrypt.compareSync(req.body.pass, cursor[i].hash)) {
+				cursor[i].pStats.pass = req.body.pass;
+				res.send(cursor[i].pStats);
+				return;
+			}
 		}
+		res.send("newUser");
 	});
 });
 
