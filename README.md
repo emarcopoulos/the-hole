@@ -117,7 +117,7 @@
 #####################################
 - added shop item:
   - allow switch for move key holding
-- click on menu items
+- can now click on menu items
 - added mobile pause button
 - allow reaccess to intro
 - changed lvlUp mechanic
@@ -138,3 +138,4 @@
 ### 6/12/2016 #######################
 #####################################
 - added rainbowBoss
+- added bcrypt password encryption
