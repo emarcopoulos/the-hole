@@ -81,7 +81,7 @@ app.get('/allStats', function (req, res) {
 app.post('/changeUser', function (req, res) {
 	db.collection('users').find({name:req.body.user}).toArray(function (err, cursor) {
 		for (var i = 0; i < cursor.length; i++) {
-			if (bcrypt.compareSync(req.body.pass, cursor[i].hash)) {
+			if (cursor[i].hash && bcrypt.compareSync(req.body.pass, cursor[i].hash)) {
 				cursor[i].pStats.pass = req.body.pass;
 				res.send(cursor[i].pStats);
 				return;
