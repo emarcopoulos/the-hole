@@ -9,7 +9,8 @@
   "dependencies": {
     "express": "latest",
     "body-parser": "latest",
-    "mongodb": "latest"
+    "mongodb": "latest",
+    "ejs": "latest"
   },
   "repository": {
     "type": "git",

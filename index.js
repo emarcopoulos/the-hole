@@ -26,11 +26,18 @@ var db = MongoClient.connect(mongoUri, function(error, databaseConnection) {
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
-	//res.send("<p>Sorry, The Game is not available at this time.</p>");
-	res.send(__dirname + '/index.html');
+	res.sendFile(__dirname+'/public/index.html');
+});
+
+app.get('/update', function (req, res) {
+	res.render(__dirname+'/public/update.html');
 });
 
 app.post('/saveGame', function (req, res) {
@@ -44,7 +51,11 @@ app.post('/saveGame', function (req, res) {
 				{upsert:true}
 			);
 		}
-		res.sendStatus(200);
+		if (pStats.v != 2.5) {
+			res.send("update");
+		} else {
+			res.sendStatus(200);
+		}
 	} else {
 		res.sendStatus(400);
 	}
@@ -52,7 +63,7 @@ app.post('/saveGame', function (req, res) {
 
 app.get('/allStats', function (req, res) {
 	db.collection('users').find().toArray(function (err, cursor) {
-		var allStats = {}
+		var allStats = {};
 		for (var i = 0; i < cursor.length; i++) {
 			if (cursor[i].name && cursor[i].pStats) {
 				allStats[cursor[i].name] = cursor[i].pStats.highScore;
