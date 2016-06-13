@@ -52,7 +52,7 @@ app.post('/saveGame', function (req, res) {
 						delete pStats.pass;
 						db.collection('users').update(
 							{_id:cursor[i]._id},
-							{name:pStats.name, pStats:pStats},
+							{name:pStats.name, hash:cursor[i].hash, pStats:pStats},
 							{upsert:true}
 						);
 						if (pStats.v != 2.5) {
