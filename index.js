@@ -46,18 +46,35 @@ app.post('/saveGame', function (req, res) {
 	var pStats = JSON.parse(req.body.pStats);
 	if (pStats) {
 		if (pStats.pass) {
-			bcrypt.hash(pStats.pass, saltRounds, function(err, hash) {
-				delete pStats.pass;
-				var toInsert = {name:pStats.name, hash:hash, pStats:pStats};
-				db.collection('users').update(
-					{$and:[{name:pStats.name},{hash:hash}]},
-					toInsert,
-					{upsert:true}
-				);
+			db.collection('users').find({name:pStats.name}).toArray(function (err, cursor) {
+				for (var i = 0; i < cursor.length; i++) {
+					if (cursor[i].hash && bcrypt.compareSync(pStats.pass, cursor[i].hash)) {
+						delete pStats.pass;
+						db.collection('users').update(
+							{_id:cursor[i]._id},
+							{name:pStats.name, pStats:pStats},
+							{upsert:true}
+						);
+						if (pStats.v != 2.5) {
+							res.send("update");
+						} else {
+							res.sendStatus(200);
+						}
+						return;
+					}
+				}
+				bcrypt.hash(pStats.pass, saltRounds, function(err, hash) {
+					delete pStats.pass;
+					db.collection('users').insert(
+						{name:pStats.name, hash:hash, pStats:pStats}
+					);
+				});
+				if (pStats.v != 2.5) {
+					res.send("update");
+				} else {
+					res.sendStatus(200);
+				}
 			});
-		}
-		if (pStats.v != 2.5) {
-			res.send("update");
 		} else {
 			res.sendStatus(200);
 		}
