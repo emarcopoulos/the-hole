@@ -25,7 +25,6 @@
 - Achievements
 	- Make shadow killer achievement
 	- Death by shadow
-	- Dying a lot achievement
 - Update system for database on index.js
 - fix bugs with kills
 
