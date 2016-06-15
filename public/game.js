@@ -734,7 +734,7 @@ var showAchievements = function () {
 			}
 			switch (i) {
 			    case 0:
-			        html += "<span class='true' title='read all the hints'>[?]</span>  ";
+			        html += "<br><br><span class='true' title='read all the hints'>[?]</span>  ";
 			        break;
 			    case 1:
 			        break;
