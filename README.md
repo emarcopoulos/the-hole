@@ -146,3 +146,4 @@
   - click on last hint
 - store name and password in storage
   - login on each refresh
+  - remember me feature

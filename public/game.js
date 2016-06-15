@@ -952,7 +952,10 @@ var login = function (name, pass) {
 		 		} else {
 		 			pStats = newUser(name, pass);
 		 		}
-				localStorage.prevLogin = JSON.stringify(pStats);
+		 		if (document.getElementById('remember').checked) {
+					localStorage.user = pStats.name;
+					localStorage.pass = pStats.pass;
+				}
 				player = "<span title='player' class='player'>" + pStats.name[0] + "</span>";
 				intro();
 	 		}
@@ -973,6 +976,7 @@ var changeUser = function () {
 	info.innerHTML = "<p>Enter your username and password:<br>\
 					  <input type='text' id='user' autofocus><br>\
 					  <input type='password' id='pass'><br>\
+					  Remember Me <input type='checkbox' id='remember' checked>\
 					  <span onclick='login();'>[Submit]</span></p>\
 					  <h6>Note: If you do not yet have an account, this form will create an account for you.</h6>";
 };
