@@ -138,3 +138,9 @@
 #####################################
 - added rainbowBoss
 - added bcrypt password encryption
+
+#####################################
+### 6/14/2016 #######################
+#####################################
+- added shadow achievements
+  - click on last hint

@@ -70,6 +70,7 @@ var newUser = function (name, pass) {
 		"interval":1000,
 		"deaths":0,
 		"stickyKeys":true,
+		"achievements":falseArray(10),
 		"v":2.5
 	};
 	if (pass) {
@@ -723,8 +724,35 @@ var showAchievements = function () {
 	for (var i = 0; i < 7; i++) {
 		html += "<span class='" + (pStats.highScore > Math.pow(2, 5 * i)) + "' title='record a score above " + Math.pow(2, 5 * i) + "'>[" + Math.pow(2, 5 * i) + "S]</span>  ";
 	}
-	html += "<br><br><span class='" + (pStats.time >= 1) + "' title='play for 1 second'>[1S]</span>  <span class='" + (pStats.time >= 10) + "' title='play for 10 seconds'>[10S]</span>  <span class='" + (pStats.time >= 60) + "' title='play for 1 minute'>[1M]</span>  <span class='" + (pStats.time >= 600) + "' title='play for 10 minutes'>[10M]</span>  <span class='" + (pStats.time >= 3600) + "' title='play for 1 hour'>[1H]</span>  <span class='" + (pStats.time >= 36000) + "' title='play for 10 hours'>[10H]</span>  <span class='" + (pStats.time >= 24 * 3600) + "' title='play for 1 day'>[1D]</span>  <span class='" + (pStats.time >= 48 * 3600) + "' title='play for 2 days'>[2D]</span>  <span class='" + (pStats.time >= 3 * 24 * 3600) + "' title='play for 3 days'>[3D]</span></pre>";
-	info.innerHTML = html;
+	html += "<br><br><span class='" + (pStats.time >= 1) + "' title='play for 1 second'>[1S]</span>  <span class='" + (pStats.time >= 10) + "' title='play for 10 seconds'>[10S]</span>  <span class='" + (pStats.time >= 60) + "' title='play for 1 minute'>[1M]</span>  <span class='" + (pStats.time >= 600) + "' title='play for 10 minutes'>[10M]</span>  <span class='" + (pStats.time >= 3600) + "' title='play for 1 hour'>[1H]</span>  <span class='" + (pStats.time >= 36000) + "' title='play for 10 hours'>[10H]</span>  <span class='" + (pStats.time >= 24 * 3600) + "' title='play for 1 day'>[1D]</span>  <span class='" + (pStats.time >= 48 * 3600) + "' title='play for 2 days'>[2D]</span>  <span class='" + (pStats.time >= 3 * 24 * 3600) + "' title='play for 3 days'>[3D]</span>";
+	var shadow = false;
+	for (var i = 0; i < pStats.achievements.length; i++) {
+		if (pStats.achievements[i]) {
+			if (!shadow) {
+				shadow = true;
+				html += "<br><br><br>S h A d O w  A c H i E v E m E n T s";
+			}
+			switch (i) {
+			    case 0:
+			        html += "<span class='true' title='read all the hints'>[?]</span>  ";
+			        break;
+			    case 1:
+			        break;
+			    case 2:
+			        break;
+			    case 3:
+			        break;
+			    case 4:
+			        break;
+			    case 5:
+			        break;
+			    case 6:
+			    	break;
+			}
+		}
+	}
+	html += "<br><br>";
+	info.innerHTML = html + "</pre>";
 };
 var showData = function () {
 	info.innerHTML = "<h1>Player Data</h1><pre>Hero Name:   " + pStats.name + "<br>Hero Level:  " + pStats.lvl + "<br>Max HP:      " + pStats.HP + "<br>Score:       " + pStats.score + "<br>High Score:  " + pStats.highScore + "<br>Deepest Run: " + pStats.maxDepth + "<br>Enemy Kills: " + pStats.kills + "<br>Death Toll: " + pStats.deaths + "<br>Time Played: " + pStats.time + "s</pre>";
@@ -839,7 +867,7 @@ var showHints = function () {
 					  <br>you will receive no bonus and lose your score.</p>\
 					  <p>The query string paramter 'size' will change the size of the map.\
 					  <br>(Game quality not guaranteed)</p>\
-					  <p>I don't think anyone even reads these things...</p>";
+					  <p onclick='pStats.achievements[0] = true;'>I don't think anyone even reads these things...</p>";
 };
 var showQuests = function () {
 	info.innerHTML = "<p>Quests coming in the next version...</p><p>There will also be more achievements and items in the shop!</p>";
