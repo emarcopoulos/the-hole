@@ -941,9 +941,7 @@ var intro = function (menu) {
 		}
 	}
 };
-var login = function () {
-	var name = document.getElementById('user').value;
-	var pass = document.getElementById('pass').value;
+var login = function (name, pass) {
 	if (name && pass) {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
@@ -968,7 +966,7 @@ var login = function () {
 var changeUser = function () {
 	document.onkeydown = function (e) {
 		if (e.keyCode == 13) {
-			login();
+			login(document.getElementById('user').value, document.getElementById('pass').value);
 		}
 	};
 	menu.innerHTML = "";
@@ -995,10 +993,10 @@ var saveGame = function () {
 	localStorage.prevLogin = JSON.stringify(pStats);
 };
 var letUsBegin = function () {
-	if (localStorage.prevLogin && JSON.parse(localStorage.prevLogin).pass) {
-		pStats = JSON.parse(localStorage.prevLogin);
-		player = "<span title='player' class='player'>"+pStats.name[0]+"</span>";
+	if (localStorage.user && localStorage.pass) {
+		login(localStorage.user, localStorage.pass);
+		pStats.v = 2.5;
+	} else {
+		intro();
 	}
-	pStats.v = 2.5;
-	intro();
 }();

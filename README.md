@@ -144,3 +144,5 @@
 #####################################
 - added shadow achievements
   - click on last hint
+- store name and password in storage
+  - login on each refresh
