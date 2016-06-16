@@ -946,7 +946,6 @@ var login = function (name, pass) {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
 	 		if (xhr.readyState == 4) {
-	 			info.innerHTML = "";
 	 			if (this.response != "newUser") {
 		 			pStats = JSON.parse(this.response);
 		 		} else {
@@ -962,7 +961,7 @@ var login = function (name, pass) {
 	 	}
 		xhr.open('POST', "/changeUser", true);
 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		sendstring = "user=" + (document.getElementById('user').value) + "&pass=" + (document.getElementById('pass').value);
+		sendstring = "user=" + (name) + "&pass=" + (pass);
 		xhr.send(sendstring);
 	}
 };
@@ -977,7 +976,7 @@ var changeUser = function () {
 					  <input type='text' id='user' autofocus><br>\
 					  <input type='password' id='pass'><br>\
 					  Remember Me <input type='checkbox' id='remember' checked>\
-					  <span onclick='login();'>[Submit]</span></p>\
+					  <span onclick='login(document.getElementById('user').value, document.getElementById('pass').value);'>[Submit]</span></p>\
 					  <h6>Note: If you do not yet have an account, this form will create an account for you.</h6>";
 };
 var saveGame = function () {
