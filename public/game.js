@@ -941,7 +941,7 @@ var intro = function (menu) {
 		}
 	}
 };
-var login = function (name, pass) {
+var login = function (name, pass, fromStorage) {
 	if (!name && !pass) {
 		name = document.getElementById('user').value;
 		pass = document.getElementById('pass').value;
@@ -955,7 +955,7 @@ var login = function (name, pass) {
 		 		} else {
 		 			pStats = newUser(name, pass);
 		 		}
-		 		if (document.getElementById('remember').checked) {
+		 		if (!fromStorage && document.getElementById('remember').checked) {
 					localStorage.user = pStats.name;
 					localStorage.pass = pStats.pass;
 				}
@@ -1001,7 +1001,7 @@ var saveGame = function () {
 };
 var letUsBegin = function () {
 	if (localStorage.user && localStorage.pass) {
-		login(localStorage.user, localStorage.pass);
+		login(localStorage.user, localStorage.pass, 1);
 		pStats.v = 2.5;
 	} else {
 		intro();
