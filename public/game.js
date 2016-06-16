@@ -942,6 +942,10 @@ var intro = function (menu) {
 	}
 };
 var login = function (name, pass) {
+	if (!name && !pass) {
+		name = document.getElementById('user').value;
+		pass = document.getElementById('pass').value;
+	}
 	if (name && pass) {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
@@ -976,7 +980,7 @@ var changeUser = function () {
 					  <input type='text' id='user' autofocus><br>\
 					  <input type='password' id='pass'><br>\
 					  Remember Me <input type='checkbox' id='remember' checked>\
-					  <span onclick='login((document.getElementById('user').value), (document.getElementById('pass').value));'>[Submit]</span></p>\
+					  <span onclick='login();'>[Submit]</span></p>\
 					  <h6>Note: If you do not yet have an account, this form will create an account for you.</h6>";
 };
 var saveGame = function () {
