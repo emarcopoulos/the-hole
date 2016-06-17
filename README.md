@@ -147,3 +147,8 @@
 - store name and password in storage
   - login on each refresh
   - remember me feature
+
+#####################################
+### 6/16/2016 #######################
+#####################################
+- added testing method

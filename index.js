@@ -38,6 +38,10 @@ app.get('/', function (req, res) {
 	res.sendFile(__dirname+'/public/index.html');
 });
 
+app.get('/1029384756', function (req, res) {
+	res.sendFile(__dirname+'/public/beta.html');
+});
+
 app.get('/update', function (req, res) {
 	res.render(__dirname+'/public/update.html');
 });
