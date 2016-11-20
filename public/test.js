@@ -348,6 +348,10 @@ var generateMap = function() {
 	}
 	dispBoard();
 };
+var tutorial = function () {
+	init();
+	state.innerHTML = "<p>Welcome to the Tutorial</p>";
+}
 var generateCheckMap = function () {
 	fillMap(0);
 	board[Math.ceil((Math.random() * (size-2)))][Math.ceil((Math.random() * (2*size-2)))] = water;
@@ -960,7 +964,11 @@ var login = function (name, pass, fromStorage) {
 					localStorage.pass = pStats.pass;
 				}
 				player = "<span title='player' class='player'>" + pStats.name[0] + "</span>";
-				intro();
+				if (this.response == "newUser") {
+					intro();
+				} else {
+					restart();
+				}
 	 		}
 	 	}
 		xhr.open('POST', "/changeUser", true);
