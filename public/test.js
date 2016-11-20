@@ -965,7 +965,7 @@ var login = function (name, pass, fromStorage) {
 				}
 				player = "<span title='player' class='player'>" + pStats.name[0] + "</span>";
 				if (this.response == "newUser") {
-					intro();
+					tutorial();
 				} else {
 					restart();
 				}
