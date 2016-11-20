@@ -349,6 +349,7 @@ var generateMap = function() {
 	dispBoard();
 };
 var tutorial = function () {
+	info.innerHTML = "";
 	init();
 	state.innerHTML = "<p>Welcome to the Tutorial</p>";
 }
