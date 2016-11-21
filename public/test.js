@@ -1073,7 +1073,8 @@ var tutorial = function () {
 					r = Math.ceil((Math.random() * (size-2)));
 					c = Math.ceil((Math.random() * (2*size-2)));
 				} while (board[r][c] == wall || board[r][c] == enemy || board[r][c] == player);
-				board[r][c] = newEnemy(r, c, 15, 0, 0)
+				board[r][c] = enemy;
+				enemies[0] = newEnemy(r, c, 15, 0, 0);
 				script.innerHTML += "<p>The <span class = '0'>" + enemy + "</span> is an enemy.</p>\
                                      <p>Walk into it to attack</p>";
 				setTimeout(hasKilled, 2000);
