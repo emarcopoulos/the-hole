@@ -850,7 +850,7 @@ var showBoard = function () {
 var showHints = function () {
 	info.innerHTML = "<h1>Hints</h1>\
 					  <h3>Basic:</h3>\
-					  <p>If you just wanna see the tutorial again, click <span onclick='menu.innerHTML=\"\";intro(1);'>[here]</span>.</p>\
+					  <p>If you just wanna see the instructions, click <span onclick='menu.innerHTML=\"\";intro(1);'>[here]</span>.</p>\
 					  <p>To attack an enemy, just walk into it.</p>\
 					  <p>You sink, but you also swim. If you move off of a water block\
 					  <br>within a fraction of a second, you won't be hurt.</p>\
@@ -925,7 +925,7 @@ var promptInfo = function () {
 		}
 	}
 }
-var intro = function (menu) {
+var intro = function () {
 	info.innerHTML = "<h1>Welcome to The Game</h1>\
 					  <p>Here is a quick breakdown of everything:<br>\
 					  "+player+" is your hero, it's the first letter of your name, "+pStats.name+".<br>\
@@ -945,20 +945,15 @@ var intro = function (menu) {
 					  Level up by battling foes!<br>\
 					  But also be sure to watch your health points (HP).<br>\
 					  Try to go deep, get a high score, and get all the weapons!</p>\
-					  <p>Press any key to start your legacy.<br>\
-					  Or click <span onclick='restart();'>[here]</span></p>";
+					  <p>Press any key to continue</p>";
 	document.onkeydown = function (e) {
 		if (e.keyCode == 85) {
 			changeUser();
 		} else if (e.keyCode == 77) {
 			mute();
 		} else {
-			if (menu) {
-				showMenu();
-				showHints();
-			} else {
-				restart();
-			}
+			showMenu();
+			showHints();
 		}
 	}
 };
@@ -1080,7 +1075,7 @@ var tutorial = function () {
 				enemies[0] = newEnemy(r, c, 15, 0, 0);
 				board[r][c] = enemy;
 				dispBoard();
-				script.innerHTML += "<p>The <span class = 1>" + enemy + "</span> is an enemy.</p>\
+				script.innerHTML += "<p>The <span class = 'type1'>" + enemy + "</span> is an enemy.</p>\
                                      <p>Walk into it to attack</p>";
 				setTimeout(hasKilled, 2000);
 			}, 750);
