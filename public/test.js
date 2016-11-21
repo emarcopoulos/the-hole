@@ -1036,12 +1036,10 @@ var tutorial = function () {
 				setTimeout(function() {
 					script.innerHTML += "<p>Also you have gained score. You can use that later to buy power ups!</p>"
 					setTimeout(function() {
-						script.innerHTML += "<p>Now you've finished the tutorial! Congrats!<br>\
-						                     Try to go deep, and get on the leaderboards.</p>"
-						pStats.achievements[1] = true;
-						setTimeout(function() {
-							script.innerHTML = "";
-						}, 20000)
+						script.innerHTML += "<p>The " + exit + " is the hole to the next floor</p>\
+											 <p>The point of the game is to adventure as deep as possible!</p>\
+											 <p>Descend to continue</p>";
+						setTimeout(hasDescended, 2000);
 					}, 1500);
 				}, 1500);
 			}, 1500);
@@ -1053,12 +1051,12 @@ var tutorial = function () {
 		if (pStats.depth) {
 			script.innerHTML = "<p>Welcome to the first real floor</p>";
 			setTimeout(function(){
-				script.innerHTML += "<p>The " + wall + " is a wall.</p>";
-				setTimeout(function(){
-					script.innerHTML += "<p>The " + enemy + " is an enemy.</p>\
-					                     <p>Walk into it to attack</p>";
-					setTimeout(hasKilled, 2000);
-				}, 1500);
+				script.innerHTML += "<p>Now you've finished the tutorial! Congrats!<br>\
+				                     Try to go deep, and get on the leaderboards.</p>"
+				pStats.achievements[1] = true;
+				setTimeout(function() {
+					script.innerHTML = "";
+				}, 10000)
 			}, 1500);
 		} else {
 			setTimeout(hasDescended, 1000);
@@ -1068,10 +1066,17 @@ var tutorial = function () {
 		if (pStats.currentWeapon) {
 			script.innerHTML = "<p>Now you can protect yourself!</p>";
 			setTimeout(function(){
-				script.innerHTML += "<p>The " + exit + " is the hole to the next floor</p>\
-									 <p>The point of the game is to adventure as deep as possible!</p>\
-									 <p>Descend to continue</p>";
-				setTimeout(hasDescended, 2000);
+				enemies = [];
+				var r;
+				var c;
+				do {
+					r = Math.ceil((Math.random() * (size-2)));
+					c = Math.ceil((Math.random() * (2*size-2)));
+				} while (board[r][c] == wall || board[r][c] == enemy || board[r][c] == player);
+				board[r][c] = newEnemy(r, c, 15, 0, 0)
+				script.innerHTML += "<p>The <span class = '0'>" + enemy + "</span> is an enemy.</p>\
+                                     <p>Walk into it to attack</p>";
+				setTimeout(hasKilled, 2000);
 			}, 750);
 		} else {
 			setTimeout(hasWeapon, 1000);
