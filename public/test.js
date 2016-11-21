@@ -1055,8 +1055,12 @@ var tutorial = function () {
 				                     Try to go deep, and get on the leaderboards.</p>"
 				pStats.achievements[1] = true;
 				setTimeout(function() {
-					script.innerHTML = "";
-				}, 10000)
+					script.innerHTML += "<p>Press 'p' to pause the game, and 'm' to toggle music</p>\
+					                     <p>Also, make sure to check out the main menu</p>";
+					setTimeout(function() {
+						script.innerHTML = "";
+					}, 15000)
+				}, 5000)
 			}, 1500);
 		} else {
 			setTimeout(hasDescended, 1000);
@@ -1072,11 +1076,11 @@ var tutorial = function () {
 				do {
 					r = Math.ceil((Math.random() * (size-2)));
 					c = Math.ceil((Math.random() * (2*size-2)));
-				} while (board[r][c] == wall || board[r][c] == player);
+				} while (board[r][c] == wall || board[r][c] == player || board[r][c] == exit);
 				enemies[0] = newEnemy(r, c, 15, 0, 0);
 				board[r][c] = enemy;
 				dispBoard();
-				script.innerHTML += "<p>The <span class = '1'>" + enemy + "</span> is an enemy.</p>\
+				script.innerHTML += "<p>The <span class = 1>" + enemy + "</span> is an enemy.</p>\
                                      <p>Walk into it to attack</p>";
 				setTimeout(hasKilled, 2000);
 			}, 750);
