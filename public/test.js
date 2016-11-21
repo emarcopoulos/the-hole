@@ -350,8 +350,8 @@ var generateMap = function() {
 };
 var tutorial = function () {
 	var temp = pos;
-	script.innerHTML = "<p>Welcome to the Tutorial!</p>
-					   <p>You are the letter "+ pStats.name[0] +"</p>
+	script.innerHTML = "<p>Welcome to the Tutorial!</p>\
+					   <p>You are the letter "+ pStats.name[0] +"</p>\
 					   <p>Press wasd or arrow keys to move</p>";
 	var hasKilled = function () {
 		if (pStats.kills) {
@@ -380,7 +380,7 @@ var tutorial = function () {
 			setTimeout(function(){
 				script.innerHTML += "<p>The " + wall + "is a wall.</p>";
 				setTimeout(function(){
-					script.innerHTML += "<p>The " + enemy + "is an enemy.</p>
+					script.innerHTML += "<p>The " + enemy + "is an enemy.</p>\
 					                     <p>Walk into it to attack</p>";
 					setTimeout(hasKilled, 1000);
 				}, 750);
@@ -393,8 +393,8 @@ var tutorial = function () {
 		if (pStats.currentWeapon) {
 			script.innerHTML = "<p>Now you can protect yourself!</p>";
 			setTimeout(function(){
-				script.innerHTML += "<p>The " + hole + "is the hole to the next floor</p>
-									 <p>The point of the game is to adventure as deep as possible!</p>
+				script.innerHTML += "<p>The " + hole + "is the hole to the next floor</p>\
+									 <p>The point of the game is to adventure as deep as possible!</p>\
 									 <p>Descend to continue</p>";
 				setTimeout(hasDescended, 1000);
 			}, 750);
