@@ -348,94 +348,6 @@ var generateMap = function() {
 	}
 	dispBoard();
 };
-var tutorial = function () {
-	var temp = pos;
-	script.innerHTML = "<p>Welcome to the Tutorial!</p>\
-					   <p>You are the letter "+ pStats.name[0] +"</p>\
-					   <p>Press wasd or arrow keys to move</p>";
-	var hasKilled = function () {
-		if (pStats.kills) {
-			script.innerHTML = "<p>You killed it!</p>";
-			setTimeout(function() {
-				script.innerHTML += "<p>Notice you leveled up! Now you'll do more damage.</p>";
-				setTimeout(function() {
-					script.innerHTML += "<p>Also you have gained score. You can use that later to buy power ups!</p>"
-					setTimeout(function() {
-						script.innerHTML += "<p>Now you've finished the tutorial! Congrats!<br>\
-						                     Try to go deep, and get on the leaderboards.</p>"
-						pStats.achievements[1] = true;
-						setTimeout(function() {
-							script.innerHTML = "";
-						}, 5000)
-					}, 750);
-				}, 750);
-			}, 750);
-		} else {
-			setTimeout(hasKilled, 500);
-		}
-	};
-	var hasDescended = function () {
-		if (pStats.depth) {
-			script.innerHTML = "<p>Welcome to the first real floor</p>";
-			setTimeout(function(){
-				script.innerHTML += "<p>The " + wall + "is a wall.</p>";
-				setTimeout(function(){
-					script.innerHTML += "<p>The " + enemy + "is an enemy.</p>\
-					                     <p>Walk into it to attack</p>";
-					setTimeout(hasKilled, 1000);
-				}, 750);
-			}, 750);
-		} else {
-			setTimeout(hasDescended, 500);
-		}
-	};
-	var hasWeapon = function () {
-		if (pStats.currentWeapon) {
-			script.innerHTML = "<p>Now you can protect yourself!</p>";
-			setTimeout(function(){
-				script.innerHTML += "<p>The " + hole + "is the hole to the next floor</p>\
-									 <p>The point of the game is to adventure as deep as possible!</p>\
-									 <p>Descend to continue</p>";
-				setTimeout(hasDescended, 1000);
-			}, 750);
-		} else {
-			setTimeout(hasWeapon, 500);
-		}
-	};
-	var hasSwum = function () {
-		if (pStats.HP != 100) {
-			script.innerHTML = "<p>Oh no!</p>";
-			setTimeout(function() {
-				script.innerHTML += "<p>You are losing health points! (HP)</p>\
-									 <p>You can only swim for about a second before you sink</p>";
-				setTimeout(function() {
-					script.innerHTML += "<p>See the " + weapon +"?</p>";
-					setTimeout(function() {
-						script.innerHTML += "<p>That's a weapon. Pick it up to defend yourself from enemies!</p>";
-						setTimeout(hasWeapon, 1000);
-					}, 1000);
-				}, 1500);
-			}, 500);
-		} else {
-			setTimeout(hasSwum, 500);
-		}
-	};			   
-	var hasMoved = function () {
-		if (pos != temp) {
-			script.innerHTML = "<p>Good job!</p>";
-			setTimeout(function() {
-				script.innerHTML += "<p> See the "+ water + "?</p>";
-				setTimeout(function() {
-					script.innerHTML += "<p>That is water. Go swimming to continue.</p>"
-					setTimeout(hasSwum, 1000);
-				}, 500)
-			}, 750); 
-		} else {
-			setTimeout(hasMoved, 500);
-		}
-	};
-	setTimeout(hasMoved, 2000);
-}
 var generateCheckMap = function () {
 	fillMap(0);
 	board[Math.ceil((Math.random() * (size-2)))][Math.ceil((Math.random() * (2*size-2)))] = water;
@@ -1111,6 +1023,94 @@ var saveGame = function () {
 	xhr.send(sendstring);
 	localStorage.prevLogin = JSON.stringify(pStats);
 };
+var tutorial = function () {
+	var temp = pos;
+	script.innerHTML = "<p>Welcome to the Tutorial!</p>\
+					   <p>You are the letter "+ pStats.name[0] +"</p>\
+					   <p>Press wasd or arrow keys to move</p>";
+	var hasKilled = function () {
+		if (pStats.kills) {
+			script.innerHTML = "<p>You killed it!</p>";
+			setTimeout(function() {
+				script.innerHTML += "<p>Notice you leveled up! Now you'll do more damage.</p>";
+				setTimeout(function() {
+					script.innerHTML += "<p>Also you have gained score. You can use that later to buy power ups!</p>"
+					setTimeout(function() {
+						script.innerHTML += "<p>Now you've finished the tutorial! Congrats!<br>\
+						                     Try to go deep, and get on the leaderboards.</p>"
+						pStats.achievements[1] = true;
+						setTimeout(function() {
+							script.innerHTML = "";
+						}, 5000)
+					}, 750);
+				}, 750);
+			}, 750);
+		} else {
+			setTimeout(hasKilled, 500);
+		}
+	};
+	var hasDescended = function () {
+		if (pStats.depth) {
+			script.innerHTML = "<p>Welcome to the first real floor</p>";
+			setTimeout(function(){
+				script.innerHTML += "<p>The " + wall + "is a wall.</p>";
+				setTimeout(function(){
+					script.innerHTML += "<p>The " + enemy + "is an enemy.</p>\
+					                     <p>Walk into it to attack</p>";
+					setTimeout(hasKilled, 1000);
+				}, 750);
+			}, 750);
+		} else {
+			setTimeout(hasDescended, 500);
+		}
+	};
+	var hasWeapon = function () {
+		if (pStats.currentWeapon) {
+			script.innerHTML = "<p>Now you can protect yourself!</p>";
+			setTimeout(function(){
+				script.innerHTML += "<p>The " + exit + "is the hole to the next floor</p>\
+									 <p>The point of the game is to adventure as deep as possible!</p>\
+									 <p>Descend to continue</p>";
+				setTimeout(hasDescended, 1000);
+			}, 750);
+		} else {
+			setTimeout(hasWeapon, 500);
+		}
+	};
+	var hasSwum = function () {
+		if (pStats.HP != 100) {
+			script.innerHTML = "<p>Oh no!</p>";
+			setTimeout(function() {
+				script.innerHTML += "<p>You are losing health points! (HP)</p>\
+									 <p>You can only swim for about a second before you sink</p>";
+				setTimeout(function() {
+					script.innerHTML += "<p>See the " + weapon +"?</p>";
+					setTimeout(function() {
+						script.innerHTML += "<p>That's a weapon. Pick it up to defend yourself from enemies!</p>";
+						setTimeout(hasWeapon, 1000);
+					}, 1000);
+				}, 1500);
+			}, 500);
+		} else {
+			setTimeout(hasSwum, 500);
+		}
+	};			   
+	var hasMoved = function () {
+		if (pos != temp) {
+			script.innerHTML = "<p>Good job!</p>";
+			setTimeout(function() {
+				script.innerHTML += "<p> See the "+ water + "?</p>";
+				setTimeout(function() {
+					script.innerHTML += "<p>That is water. Go swimming to continue.</p>"
+					setTimeout(hasSwum, 1000);
+				}, 500)
+			}, 750); 
+		} else {
+			setTimeout(hasMoved, 500);
+		}
+	};
+	setTimeout(hasMoved, 2000);
+}
 var letUsBegin = function () {
 	if (localStorage.user && localStorage.pass) {
 		login(localStorage.user, localStorage.pass, 1);
