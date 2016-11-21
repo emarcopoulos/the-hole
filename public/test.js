@@ -406,7 +406,7 @@ var tutorial = function () {
 		if (pStats.HP != 100) {
 			script.innerHTML = "<p>Oh no!</p>";
 			setTimeout(function() {
-				script.innerHTML += "<p>You are losing health points! (HP)</p>
+				script.innerHTML += "<p>You are losing health points! (HP)</p>\
 									 <p>You can only swim for about a second before you sink</p>";
 				setTimeout(function() {
 					script.innerHTML += "<p>See the " + weapon +"?</p>";
