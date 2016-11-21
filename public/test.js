@@ -976,9 +976,11 @@ var login = function (name, pass, fromStorage) {
 					localStorage.pass = pStats.pass;
 				}
 				player = "<span title='player' class='player'>" + pStats.name[0] + "</span>";
-				restart();
 				if (this.response == "newUser") {
+					restart();
 					tutorial();
+				} else {
+					showMenu();
 				}
 	 		}
 	 	}
