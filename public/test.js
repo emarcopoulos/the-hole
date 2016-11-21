@@ -1041,40 +1041,40 @@ var tutorial = function () {
 						pStats.achievements[1] = true;
 						setTimeout(function() {
 							script.innerHTML = "";
-						}, 5000)
-					}, 750);
-				}, 750);
-			}, 750);
+						}, 20000)
+					}, 1500);
+				}, 1500);
+			}, 1500);
 		} else {
-			setTimeout(hasKilled, 500);
+			setTimeout(hasKilled, 1000);
 		}
 	};
 	var hasDescended = function () {
 		if (pStats.depth) {
 			script.innerHTML = "<p>Welcome to the first real floor</p>";
 			setTimeout(function(){
-				script.innerHTML += "<p>The " + wall + "is a wall.</p>";
+				script.innerHTML += "<p>The " + wall + " is a wall.</p>";
 				setTimeout(function(){
-					script.innerHTML += "<p>The " + enemy + "is an enemy.</p>\
+					script.innerHTML += "<p>The " + enemy + " is an enemy.</p>\
 					                     <p>Walk into it to attack</p>";
-					setTimeout(hasKilled, 1000);
-				}, 750);
-			}, 750);
+					setTimeout(hasKilled, 2000);
+				}, 1500);
+			}, 1500);
 		} else {
-			setTimeout(hasDescended, 500);
+			setTimeout(hasDescended, 1000);
 		}
 	};
 	var hasWeapon = function () {
 		if (pStats.currentWeapon) {
 			script.innerHTML = "<p>Now you can protect yourself!</p>";
 			setTimeout(function(){
-				script.innerHTML += "<p>The " + exit + "is the hole to the next floor</p>\
+				script.innerHTML += "<p>The " + exit + " is the hole to the next floor</p>\
 									 <p>The point of the game is to adventure as deep as possible!</p>\
 									 <p>Descend to continue</p>";
-				setTimeout(hasDescended, 1000);
+				setTimeout(hasDescended, 2000);
 			}, 750);
 		} else {
-			setTimeout(hasWeapon, 500);
+			setTimeout(hasWeapon, 1000);
 		}
 	};
 	var hasSwum = function () {
@@ -1087,12 +1087,12 @@ var tutorial = function () {
 					script.innerHTML += "<p>See the " + weapon +"?</p>";
 					setTimeout(function() {
 						script.innerHTML += "<p>That's a weapon. Pick it up to defend yourself from enemies!</p>";
-						setTimeout(hasWeapon, 1000);
-					}, 1000);
-				}, 1500);
-			}, 500);
+						setTimeout(hasWeapon, 2000);
+					}, 2000);
+				}, 3000);
+			}, 1000);
 		} else {
-			setTimeout(hasSwum, 500);
+			setTimeout(hasSwum, 1000);
 		}
 	};			   
 	var hasMoved = function () {
@@ -1102,14 +1102,14 @@ var tutorial = function () {
 				script.innerHTML += "<p> See the "+ water + "?</p>";
 				setTimeout(function() {
 					script.innerHTML += "<p>That is water. Go swimming to continue.</p>"
-					setTimeout(hasSwum, 1000);
-				}, 500)
-			}, 750); 
+					setTimeout(hasSwum, 2000);
+				}, 1000)
+			}, 1500); 
 		} else {
-			setTimeout(hasMoved, 500);
+			setTimeout(hasMoved, 1000);
 		}
 	};
-	setTimeout(hasMoved, 2000);
+	setTimeout(hasMoved, 3000);
 }
 var letUsBegin = function () {
 	if (localStorage.user && localStorage.pass) {
