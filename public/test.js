@@ -184,7 +184,7 @@ var smileyBoss = function () {
 	board[3][35] = HPack;
 	for (var i = 3; i <= 8; i++) {
 		if (!exitPlaced && Math.random() < .08) {
-			board[i][(Math.random()<.5&&13)||24] = exit;
+			board[i][(13&&Math.random()<.5)||24] = exit;
 			exitPlaced = true;
 		}
 		enemies[enemies.length] = newEnemy(i,24,Math.floor(Math.random() * 10) + pStats.depth,"eye", pStats.depth/3 + 1);
@@ -237,7 +237,7 @@ var rainbowBoss = function () {
 	for (var i = 0; i < rainbow.length; i++) {
 		for (var j = 0; j < rainbow[i][1].length; j++) {
 			if (rainbow[i][0] == "green" && !exitPlaced && Math.random() < .1) {
-				board[ top + rainbow[i][1][j][0] ][ (((Math.random() < .5) && (midCol + rainbow[i][1][j][1])) || (midCol - rainbow[i][1][j][1])) ] = exit;
+				board[ top + rainbow[i][1][j][0] ][ (((midCol + rainbow[i][1][j][1]) && (Math.random()<.5)) || (midCol - rainbow[i][1][j][1])) ] = exit;
 				exitPlaced = true;
 			} else if (!exitPlaced && rainbow[i][0] == "cloud") {
 				board[15][9] = exit;
