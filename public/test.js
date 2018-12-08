@@ -363,7 +363,7 @@ var init = function () {
 	}
 	pos = [Math.ceil((Math.random() * (size-2))),Math.ceil((Math.random() * (2*size-2)))];
 	generateCheckMap();
-	stats.innerHTML="<pre>HI MADHero: "+pStats.name+"<br><span id='health'>HP: "+pStats.HP+"/"+pStats.maxHP+"</span><br>Score: <span id='score'>"+pStats.score+"</span>   High: <span id='highScore'>"+pStats.highScore+"</span><br>You have descended <span id='depth'>"+pStats.depth+"</span> floors<br>You brandish <span title='Does "+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].dmg)||0)+" damage' id='weapon'>"+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].name)||"a smile")+"</span><br>Your hero is level <span id='level'>"+pStats.lvl+"</span><br>(<span id='toNextLvl'>"+(1-pStats.kills+toLevelUp())+"</span> kills to next level)</pre>\
+	stats.innerHTML="<pre>Hero: "+pStats.name+"<br><span id='health'>HP: "+pStats.HP+"/"+pStats.maxHP+"</span><br>Score: <span id='score'>"+pStats.score+"</span>   High: <span id='highScore'>"+pStats.highScore+"</span><br>You have descended <span id='depth'>"+pStats.depth+"</span> floors<br>You brandish <span title='Does "+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].dmg)||0)+" damage' id='weapon'>"+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].name)||"a smile")+"</span><br>Your hero is level <span id='level'>"+pStats.lvl+"</span><br>(<span id='toNextLvl'>"+(1-pStats.kills+toLevelUp())+"</span> kills to next level)</pre>\
 	                 <div id='state'></div>\
 	                 <div id='battle'></div>\
 	                 <div id='script'></div>\
@@ -1025,25 +1025,18 @@ var tutorial = function () {
 	script.innerHTML = "<p>Welcome to the Tutorial!</p>\
 					   <p>You are the letter "+ pStats.name[0] +"</p>\
 					   <p>Press wasd or arrow keys to move</p>";
-	var hasKilled = function () {
-		if (pStats.kills) {
-			script.innerHTML = "<p>You killed it!</p>";
-			setTimeout(function() {
-				script.innerHTML += "<p>Notice you leveled up! Now you'll do more damage.</p>";
-				setTimeout(function() {
-					script.innerHTML += "<p>Also you have gained score. You can use that later to buy power ups!</p>"
-					setTimeout(function() {
-						script.innerHTML += "<p>The " + exit + " is the hole to the next floor</p>\
-											 <p>The point of the game is to adventure as deep as possible!</p>\
-											 <p>Descend to continue</p>";
-						setTimeout(hasDescended, 2000);
-					}, 1500);
-				}, 1500);
-			}, 1500);
-		} else {
-			setTimeout(hasKilled, 1000);
+	var exitRow = 0;
+	var exitCol = 0;
+	for (var i = 0; i < size; i++) {
+		for (var j = 0; j < 2*size; j++) {
+			if (board[i][j] == exit) {
+				board[i][j] = path;
+				exitRow = i;
+				exitCol = j;
+			}
 		}
-	};
+	}
+	dispBoard();
 	var hasDescended = function () {
 		if (pStats.depth) {
 			script.innerHTML = "<p>Welcome to the first real floor</p>";
@@ -1061,6 +1054,27 @@ var tutorial = function () {
 			}, 1500);
 		} else {
 			setTimeout(hasDescended, 1000);
+		}
+	};
+	var hasKilled = function () {
+		if (pStats.kills) {
+			script.innerHTML = "<p>You killed it!</p>";
+			setTimeout(function() {
+				script.innerHTML += "<p>Notice you leveled up! Now you'll do more damage.</p>";
+				setTimeout(function() {
+					script.innerHTML += "<p>Also you have gained score. You can use that later to buy power ups!</p>"
+					setTimeout(function() {
+						board[exitRow][exitCol] = exit;
+						dispBoard();
+						script.innerHTML += "<p>The " + exit + " is the hole to the next floor</p>\
+											 <p>The point of the game is to adventure as deep as possible!</p>\
+											 <p>Descend to continue</p>";
+						setTimeout(hasDescended, 2000);
+					}, 1500);
+				}, 1500);
+			}, 1500);
+		} else {
+			setTimeout(hasKilled, 1000);
 		}
 	};
 	var hasWeapon = function () {
