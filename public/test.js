@@ -1,3 +1,4 @@
+var versionNumber = 2.51
 var qString;
 window.onpopstate = function () { //http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
     var match,
@@ -71,7 +72,7 @@ var newUser = function (name, pass) {
 		"deaths":0,
 		"stickyKeys":true,
 		"achievements":falseArray(10),
-		"v":2.5
+		"v":versionNumber
 	};
 	if (pass) {
 		playerStats.pass = pass;
@@ -982,6 +983,7 @@ var login = function (name, pass, fromStorage) {
 				} else {
 					showMenu();
 				}
+				pStats.v = versionNumber;
 	 		}
 	 	}
 		xhr.open('POST', "/changeUser", true);
@@ -1136,7 +1138,6 @@ var tutorial = function () {
 var letUsBegin = function () {
 	if (localStorage.user && localStorage.pass) {
 		login(localStorage.user, localStorage.pass, 1);
-		pStats.v = 2.51;
 	} else {
 		promptInfo();
 	}
