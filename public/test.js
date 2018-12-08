@@ -363,7 +363,7 @@ var init = function () {
 	}
 	pos = [Math.ceil((Math.random() * (size-2))),Math.ceil((Math.random() * (2*size-2)))];
 	generateCheckMap();
-	stats.innerHTML="<pre>Hero: "+pStats.name+"<br><span id='health'>HP: "+pStats.HP+"/"+pStats.maxHP+"</span><br>Score: <span id='score'>"+pStats.score+"</span>   High: <span id='highScore'>"+pStats.highScore+"</span><br>You have descended <span id='depth'>"+pStats.depth+"</span> floors<br>You brandish <span title='Does "+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].dmg)||0)+" damage' id='weapon'>"+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].name)||"a smile")+"</span><br>Your hero is level <span id='level'>"+pStats.lvl+"</span><br>(<span id='toNextLvl'>"+(1-pStats.kills+toLevelUp())+"</span> kills to next level)</pre>\
+	stats.innerHTML="<pre>HI MADHero: "+pStats.name+"<br><span id='health'>HP: "+pStats.HP+"/"+pStats.maxHP+"</span><br>Score: <span id='score'>"+pStats.score+"</span>   High: <span id='highScore'>"+pStats.highScore+"</span><br>You have descended <span id='depth'>"+pStats.depth+"</span> floors<br>You brandish <span title='Does "+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].dmg)||0)+" damage' id='weapon'>"+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].name)||"a smile")+"</span><br>Your hero is level <span id='level'>"+pStats.lvl+"</span><br>(<span id='toNextLvl'>"+(1-pStats.kills+toLevelUp())+"</span> kills to next level)</pre>\
 	                 <div id='state'></div>\
 	                 <div id='battle'></div>\
 	                 <div id='script'></div>\
@@ -1122,7 +1122,7 @@ var tutorial = function () {
 var letUsBegin = function () {
 	if (localStorage.user && localStorage.pass) {
 		login(localStorage.user, localStorage.pass, 1);
-		pStats.v = 2.5;
+		pStats.v = 2.51;
 	} else {
 		promptInfo();
 	}

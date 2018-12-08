@@ -73,7 +73,7 @@ app.post('/saveGame', function (req, res) {
 						{name:pStats.name, hash:hash, pStats:pStats}
 					);
 				});
-				if (pStats.v != 2.5) {
+				if (pStats.v != 2.51) {
 					res.send("update");
 				} else {
 					res.sendStatus(200);
