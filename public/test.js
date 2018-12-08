@@ -617,7 +617,7 @@ var update = function () {
 	pStats.time++;
 	if (prev == water && !pStats.waterShield) {
 		state.innerHTML = "<p><br>You are drowning</p>";
-		getHit(Math.ceil(pStats.maxHP * .01));
+		getHit(Math.ceil(pStats.maxHP * .01 * Math.log(pStats.depth)));
 	} else if (pStats.justDescended && pStats.depth % 10) {
 		if (prev == start) {
 			state.innerHTML = "<p><br>You descend to the next floor</p>";
