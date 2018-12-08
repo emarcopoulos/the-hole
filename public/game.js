@@ -1,3 +1,4 @@
+var versionNumber = 2.51
 var qString;
 window.onpopstate = function () { //http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
     var match,
@@ -71,7 +72,7 @@ var newUser = function (name, pass) {
 		"deaths":0,
 		"stickyKeys":true,
 		"achievements":falseArray(10),
-		"v":2.5
+		"v":versionNumber
 	};
 	if (pass) {
 		playerStats.pass = pass;
@@ -91,7 +92,7 @@ var exit = "<span title='hole' class='exit'>O</span>";
 var map = document.getElementById("map");
 var elems = [];
 var stats = document.getElementById("stats");
-var state, battle, health, score, depth, level, toNextLvl, tool, highScore;
+var state, battle, health, score, depth, level, toNextLvl, tool, highScore, script;
 var menu = document.getElementById('menu');
 var info = document.getElementById('info');
 var board = [];
@@ -184,7 +185,7 @@ var smileyBoss = function () {
 	board[3][35] = HPack;
 	for (var i = 3; i <= 8; i++) {
 		if (!exitPlaced && Math.random() < .08) {
-			board[i][(13&&Math.random()<.5)||24] = exit;
+			board[i][(Math.random()<.5&&13)||24] = exit;
 			exitPlaced = true;
 		}
 		enemies[enemies.length] = newEnemy(i,24,Math.floor(Math.random() * 10) + pStats.depth,"eye", pStats.depth/3 + 1);
@@ -237,7 +238,7 @@ var rainbowBoss = function () {
 	for (var i = 0; i < rainbow.length; i++) {
 		for (var j = 0; j < rainbow[i][1].length; j++) {
 			if (rainbow[i][0] == "green" && !exitPlaced && Math.random() < .1) {
-				board[ top + rainbow[i][1][j][0] ][ (((midCol + rainbow[i][1][j][1]) && (Math.random()<.5)) || (midCol - rainbow[i][1][j][1])) ] = exit;
+				board[ top + rainbow[i][1][j][0] ][ (((Math.random() < .5) && (midCol + rainbow[i][1][j][1])) || (midCol - rainbow[i][1][j][1])) ] = exit;
 				exitPlaced = true;
 			} else if (!exitPlaced && rainbow[i][0] == "cloud") {
 				board[15][9] = exit;
@@ -363,7 +364,11 @@ var init = function () {
 	}
 	pos = [Math.ceil((Math.random() * (size-2))),Math.ceil((Math.random() * (2*size-2)))];
 	generateCheckMap();
-	stats.innerHTML="<pre>Hero: "+pStats.name+"<br><span id='health'>HP: "+pStats.HP+"/"+pStats.maxHP+"</span><br>Score: <span id='score'>"+pStats.score+"</span>   High: <span id='highScore'>"+pStats.highScore+"</span><br>You have descended <span id='depth'>"+pStats.depth+"</span> floors<br>You brandish <span title='Does "+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].dmg)||0)+" damage' id='weapon'>"+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].name)||"a smile")+"</span><br>Your hero is level <span id='level'>"+pStats.lvl+"</span><br>(<span id='toNextLvl'>"+(1-pStats.kills+toLevelUp())+"</span> kills to next level)</pre><div id='state'></div><div id='battle'></div><div id='keys'></div>";
+	stats.innerHTML="<pre>Hero: "+pStats.name+"<br><span id='health'>HP: "+pStats.HP+"/"+pStats.maxHP+"</span><br>Score: <span id='score'>"+pStats.score+"</span>   High: <span id='highScore'>"+pStats.highScore+"</span><br>You have descended <span id='depth'>"+pStats.depth+"</span> floors<br>You brandish <span title='Does "+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].dmg)||0)+" damage' id='weapon'>"+(((pStats.currentWeapon>0)&&weapons[pStats.currentWeapon-1].name)||"a smile")+"</span><br>Your hero is level <span id='level'>"+pStats.lvl+"</span><br>(<span id='toNextLvl'>"+(1-pStats.kills+toLevelUp())+"</span> kills to next level)</pre>\
+	                 <div id='state'></div>\
+	                 <div id='battle'></div>\
+	                 <div id='script'></div>\
+	                 <div id='keys'></div>";
 	state = document.getElementById('state');
 	battle = document.getElementById('battle');
 	health = document.getElementById('health');
@@ -373,6 +378,7 @@ var init = function () {
 	depth = document.getElementById('depth');
 	score = document.getElementById('score');
 	highScore = document.getElementById('highScore');
+	script = document.getElementById('script');
 	if (isMobile) {
 		document.getElementById('keys').innerHTML = "<button type='button' onclick='pauseGame();'>Pause</button><div id='horz'><button type='button' onclick='\
 			if (board[pos[0]][pos[1]-1] != wall) {\
@@ -612,7 +618,7 @@ var update = function () {
 	pStats.time++;
 	if (prev == water && !pStats.waterShield) {
 		state.innerHTML = "<p><br>You are drowning</p>";
-		getHit(Math.ceil(pStats.maxHP * .01));
+		getHit(Math.ceil(pStats.maxHP * .01 * Math.log(pStats.depth + 3)));
 	} else if (pStats.justDescended && pStats.depth % 10) {
 		if (prev == start) {
 			state.innerHTML = "<p><br>You descend to the next floor</p>";
@@ -665,8 +671,8 @@ var restart = function (boost) {
 		pStats.score = 0;
 		saveGame();
 	}
-	everySecond = setInterval(update, pStats.interval);
 	init();
+	everySecond = setInterval(update, pStats.interval);
 };
 var showInfo = function () {
 	info.innerHTML = "<p>This is a dungeon style game developed by Elias Marcopoulos.</p>\
@@ -737,6 +743,7 @@ var showAchievements = function () {
 			        html += "<br><br><span class='true' title='read all the hints'>[?]</span>  ";
 			        break;
 			    case 1:
+			        html += "<br><br><span class='true' title='complete the tutorial'>[:)]</span>  "
 			        break;
 			    case 2:
 			        break;
@@ -755,7 +762,7 @@ var showAchievements = function () {
 	info.innerHTML = html + "</pre>";
 };
 var showData = function () {
-	info.innerHTML = "<h1>Player Data</h1><pre>Hero Name:   " + pStats.name + "<br>Hero Level:  " + pStats.lvl + "<br>Max HP:      " + pStats.HP + "<br>Score:       " + pStats.score + "<br>High Score:  " + pStats.highScore + "<br>Deepest Run: " + pStats.maxDepth + "<br>Enemy Kills: " + pStats.kills + "<br>Death Toll: " + pStats.deaths + "<br>Time Played: " + pStats.time + "s</pre>";
+	info.innerHTML = "<h1>Player Data</h1><pre>Hero Name:   " + pStats.name + "<br>Hero Level:  " + pStats.lvl + "<br>Max HP:      " + pStats.maxHP + "<br>Score:       " + pStats.score + "<br>High Score:  " + pStats.highScore + "<br>Deepest Run: " + pStats.maxDepth + "<br>Enemy Kills: " + pStats.kills + "<br>Death Toll: " + pStats.deaths + "<br>Time Played: " + pStats.time + "s</pre>";
 };
 var showShop = function () {
 	info.innerHTML="<h1>Shop</h1>\
@@ -844,7 +851,7 @@ var showBoard = function () {
 var showHints = function () {
 	info.innerHTML = "<h1>Hints</h1>\
 					  <h3>Basic:</h3>\
-					  <p>If you just wanna see the tutorial again, click <span onclick='menu.innerHTML=\"\";intro(1);'>[here]</span>.</p>\
+					  <p>If you just wanna see the instructions, click <span onclick='menu.innerHTML=\"\";intro(1);'>[here]</span>.</p>\
 					  <p>To attack an enemy, just walk into it.</p>\
 					  <p>You sink, but you also swim. If you move off of a water block\
 					  <br>within a fraction of a second, you won't be hurt.</p>\
@@ -904,7 +911,22 @@ var showMenu = function () {
 		}
 	}
 };
-var intro = function (menu) {
+var promptInfo = function () {
+	info.innerHTML = "<h1>Welcome to The Game</h1>\
+					  <p>Click <span onclick = 'changeUser();'>[here]</span> or press 'u' to login or create an account<br>\
+					  Click <span onclick = 'restart(); tutorial();'>[here]</span> or press anything else to play a temporary account</p>";
+	document.onkeydown = function (e) {
+		if (e.keyCode == 85) {
+			changeUser();
+		} else if (e.keyCode == 77) {
+			mute();
+		} else {
+			restart();
+			tutorial();
+		}
+	}
+}
+var intro = function () {
 	info.innerHTML = "<h1>Welcome to The Game</h1>\
 					  <p>Here is a quick breakdown of everything:<br>\
 					  "+player+" is your hero, it's the first letter of your name, "+pStats.name+".<br>\
@@ -924,20 +946,15 @@ var intro = function (menu) {
 					  Level up by battling foes!<br>\
 					  But also be sure to watch your health points (HP).<br>\
 					  Try to go deep, get a high score, and get all the weapons!</p>\
-					  <p>Press any key to start your legacy.<br>\
-					  Or click <span onclick='restart();'>[here]</span></p>";
+					  <p>Press any key to continue</p>";
 	document.onkeydown = function (e) {
 		if (e.keyCode == 85) {
 			changeUser();
 		} else if (e.keyCode == 77) {
 			mute();
 		} else {
-			if (menu) {
-				showMenu();
-				showHints();
-			} else {
-				restart();
-			}
+			showMenu();
+			showHints();
 		}
 	}
 };
@@ -960,7 +977,13 @@ var login = function (name, pass, fromStorage) {
 					localStorage.pass = pStats.pass;
 				}
 				player = "<span title='player' class='player'>" + pStats.name[0] + "</span>";
-				intro();
+				if (this.response == "newUser") {
+					restart();
+					tutorial();
+				} else {
+					showMenu();
+				}
+				pStats.v = versionNumber;
 	 		}
 	 	}
 		xhr.open('POST', "/changeUser", true);
@@ -999,11 +1022,123 @@ var saveGame = function () {
 	xhr.send(sendstring);
 	localStorage.prevLogin = JSON.stringify(pStats);
 };
+var tutorial = function () {
+	var temp = pos;
+	script.innerHTML = "<p>Welcome to the Tutorial!</p>\
+					   <p>You are the letter "+ pStats.name[0] +"</p>\
+					   <p>Press wasd or arrow keys to move</p>";
+	var exitRow = 0;
+	var exitCol = 0;
+	for (var i = 0; i < size; i++) {
+		for (var j = 0; j < 2*size; j++) {
+			if (board[i][j] == exit) {
+				board[i][j] = path;
+				exitRow = i;
+				exitCol = j;
+			}
+		}
+	}
+	dispBoard();
+	var hasDescended = function () {
+		if (pStats.depth) {
+			script.innerHTML = "<p>Welcome to the first real floor</p>";
+			setTimeout(function(){
+				script.innerHTML += "<p>Now you've finished the tutorial! Congrats!<br>\
+				                     Try to go deep, and get on the leaderboards.</p>"
+				pStats.achievements[1] = true;
+				setTimeout(function() {
+					script.innerHTML += "<p>Press 'p' to pause the game, and 'm' to toggle music</p>\
+					                     <p>Also, make sure to check out the main menu</p>";
+					setTimeout(function() {
+						script.innerHTML = "";
+					}, 15000)
+				}, 5000)
+			}, 1500);
+		} else {
+			setTimeout(hasDescended, 1000);
+		}
+	};
+	var hasKilled = function () {
+		if (pStats.kills) {
+			script.innerHTML = "<p>You killed it!</p>";
+			setTimeout(function() {
+				script.innerHTML += "<p>Notice you leveled up! Now you'll do more damage.</p>";
+				setTimeout(function() {
+					script.innerHTML += "<p>Also you have gained score. You can use that later to buy power ups!</p>"
+					setTimeout(function() {
+						board[exitRow][exitCol] = exit;
+						dispBoard();
+						script.innerHTML += "<p>The " + exit + " is the hole to the next floor</p>\
+											 <p>The point of the game is to adventure as deep as possible!</p>\
+											 <p>Descend to continue</p>";
+						setTimeout(hasDescended, 2000);
+					}, 1500);
+				}, 1500);
+			}, 1500);
+		} else {
+			setTimeout(hasKilled, 1000);
+		}
+	};
+	var hasWeapon = function () {
+		if (pStats.currentWeapon) {
+			script.innerHTML = "<p>Now you can protect yourself!</p>";
+			setTimeout(function(){
+				enemies = [];
+				var r;
+				var c;
+				do {
+					r = Math.ceil((Math.random() * (size-2)));
+					c = Math.ceil((Math.random() * (2*size-2)));
+				} while (board[r][c] == wall || board[r][c] == player || board[r][c] == exit);
+				enemies[0] = newEnemy(r, c, 15, 0, 0);
+				board[r][c] = enemy;
+				dispBoard();
+				script.innerHTML += "<p>The <span class = 'type0'>" + enemy + "</span> is an enemy.</p>\
+                                     <p>Walk into it to attack</p>";
+				setTimeout(hasKilled, 2000);
+			}, 750);
+		} else {
+			setTimeout(hasWeapon, 1000);
+		}
+	};
+	var hasSwum = function () {
+		if (pStats.HP != 100) {
+			script.innerHTML = "<p>Oh no!</p>";
+			setTimeout(function() {
+				script.innerHTML += "<p>You are losing health points! (HP)</p>\
+									 <p>You can only swim for about a second before you sink</p>";
+				setTimeout(function() {
+					script.innerHTML += "<p>See the " + weapon +"?</p>";
+					setTimeout(function() {
+						script.innerHTML += "<p>That's a weapon. Pick it up to defend yourself from enemies!</p>";
+						setTimeout(hasWeapon, 2000);
+					}, 2000);
+				}, 3000);
+			}, 1000);
+		} else {
+			setTimeout(hasSwum, 1000);
+		}
+	};			   
+	var hasMoved = function () {
+		if (pos != temp) {
+			script.innerHTML = "<p>Good job!</p>";
+			setTimeout(function() {
+				script.innerHTML += "<p> See the "+ water + "?</p>";
+				setTimeout(function() {
+					script.innerHTML += "<p>That is water. Go swimming to continue.</p>"
+					setTimeout(hasSwum, 2000);
+				}, 1000)
+			}, 1500); 
+		} else {
+			setTimeout(hasMoved, 1000);
+		}
+	};
+	setTimeout(hasMoved, 3000);
+}
 var letUsBegin = function () {
 	if (localStorage.user && localStorage.pass) {
 		login(localStorage.user, localStorage.pass, 1);
-		pStats.v = 2.5;
 	} else {
-		intro();
+		promptInfo();
 	}
 }();

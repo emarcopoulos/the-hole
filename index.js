@@ -6,6 +6,7 @@ var MongoClient = require('mongodb').MongoClient, format = require('util').forma
 var ObjectId = require('mongodb').ObjectId;
 var mongoUri = "mongodb://heroku_m4c5l1x1:n1q59l0vq10d5njkjc8hdgnig3@ds023613.mlab.com:23613/heroku_m4c5l1x1";
 var bcrypt = require('bcrypt');
+var versionNumber = 2.51;
 const saltRounds = 10;
 
 app.set('port', (process.env.PORT || 5000));
@@ -59,7 +60,7 @@ app.post('/saveGame', function (req, res) {
 							{name:pStats.name, hash:cursor[i].hash, pStats:pStats},
 							{upsert:true}
 						);
-						if (pStats.v != 2.51) {
+						if (pStats.v != versionNumber) {
 							res.send("update");
 						} else {
 							res.sendStatus(200);
@@ -73,7 +74,7 @@ app.post('/saveGame', function (req, res) {
 						{name:pStats.name, hash:hash, pStats:pStats}
 					);
 				});
-				if (pStats.v != 2.51) {
+				if (pStats.v != versionNumber) {
 					res.send("update");
 				} else {
 					res.sendStatus(200);
