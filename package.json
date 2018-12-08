@@ -9,7 +9,7 @@
   "dependencies": {
     "express": "latest",
     "body-parser": "latest",
-    "mongodb": "latest",
+    "mongodb": "^2.2.33",
     "ejs": "latest",
     "bcrypt":"latest"
   },
