@@ -761,7 +761,7 @@ var showAchievements = function () {
 	info.innerHTML = html + "</pre>";
 };
 var showData = function () {
-	info.innerHTML = "<h1>Player Data</h1><pre>Hero Name:   " + pStats.name + "<br>Hero Level:  " + pStats.lvl + "<br>Max HP:      " + pStats.HP + "<br>Score:       " + pStats.score + "<br>High Score:  " + pStats.highScore + "<br>Deepest Run: " + pStats.maxDepth + "<br>Enemy Kills: " + pStats.kills + "<br>Death Toll: " + pStats.deaths + "<br>Time Played: " + pStats.time + "s</pre>";
+	info.innerHTML = "<h1>Player Data</h1><pre>Hero Name:   " + pStats.name + "<br>Hero Level:  " + pStats.lvl + "<br>Max HP:      " + pStats.maxHP + "<br>Score:       " + pStats.score + "<br>High Score:  " + pStats.highScore + "<br>Deepest Run: " + pStats.maxDepth + "<br>Enemy Kills: " + pStats.kills + "<br>Death Toll: " + pStats.deaths + "<br>Time Played: " + pStats.time + "s</pre>";
 };
 var showShop = function () {
 	info.innerHTML="<h1>Shop</h1>\
